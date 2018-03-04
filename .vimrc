@@ -28,6 +28,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 Plug 'raimondi/delimitmate'
 Plug 'shougo/neocomplete.vim'
+Plug 'scrooloose/nerdcommenter'
 
 " Language support
 Plug 'scrooloose/syntastic' 
