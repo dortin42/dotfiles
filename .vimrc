@@ -29,22 +29,21 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'raimondi/delimitmate'
 Plug 'shougo/neocomplete.vim'
 Plug 'scrooloose/nerdcommenter'
+Plug 'vim-scripts/AutoComplPop'
 
 " Language support
 Plug 'scrooloose/syntastic' 
-Plug 'pangloss/vim-javascript'
-Plug 'kchmck/vim-coffee-script' 
+Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'matze/vim-move'
 Plug 'sheerun/vim-polyglot'
 Plug 'wlangstroth/vim-racket'
 Plug 'valloric/youcompleteme'
+Plug 'ervandew/supertab'
 Plug 'tfnico/vim-gradle'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-endwise'
 Plug 'alvan/vim-closetag'
-Plug 'rust-lang/rust.vim'
-Plug 'racer-rust/vim-racer'
 
 " Colorschemes
     Plug 'morhetz/gruvbox'
@@ -112,11 +111,11 @@ set relativenumber      " show numbers as relative by default
 set showmatch           " higlight matching parentheses and brackets
 
 " Vim-move Alt dont works
-let g:move_key_modifier = 'S'
+let g:move_key_modifier = 'C-S'
 
-" Emmet Ctrl+Z+,
+" Emmet Ctrl+b+,
 let mapleader=","
-let g:user_emmet_leader_key='<C-Z>'
+let g:user_emmet_leader_key='<C-b>'
 colorscheme gruvbox
 " Make window navigation less painful.
 map <C-h> <C-w>h
@@ -126,10 +125,10 @@ map <C-l> <C-w>l
 
 " Mapping for multiple-cursors
 let g:multi_cursor_prev_key='<C-x>'
-let g:multi_cursor_next_key='<C-m>'
+let g:multi_cursor_next_key='<C-d>'
 let g:multi_cursor_skip_key='<C-l>'
 let g:multi_cursor_quit_key='<Esc>'
-let g:multi_cursor_start_key='<C-m>'
+let g:multi_cursor_start_key='<C-d>'
 
 " Move CtrlP to CtrlT (CtrlP is for buffers)
 let g:ctrlp_map = '<C-t>'
@@ -152,3 +151,6 @@ imap <F5> <ESC>:set invrelativenumber<CR>a
 map <Leader>nt :NERDTreeToggle<CR>
 let NERDTreeQuitOnOpen=1
 let NERDTreeWinSize=20
+
+" JavaScript libraries
+let g:used_javascript_libs = 'underscore,backbone,jquery,angularjs,angularui,react,vue'
