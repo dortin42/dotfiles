@@ -33,6 +33,11 @@ Plug 'vim-scripts/AutoComplPop'
 
 " Language support
 Plug 'scrooloose/syntastic' 
+Plug 'othree/html5.vim'
+Plug 'stanangeloff/php.vim'
+Plug 'shawncplus/phpcomplete.vim'
+Plug 'ap/vim-css-color'
+Plug 'hail2u/vim-css3-syntax'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'matze/vim-move'
@@ -154,3 +159,14 @@ let NERDTreeWinSize=20
 
 " JavaScript libraries
 let g:used_javascript_libs = 'underscore,backbone,jquery,angularjs,angularui,react,vue'
+
+" Syntax
+syn on
+syntax on
+
+" Correct highlight for CSS files
+augroup VimCSS3Syntax
+    autocmd!
+
+    autocmd FileType css setlocal iskeyword+=-
+augroup END
