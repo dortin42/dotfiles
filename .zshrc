@@ -1,3 +1,6 @@
+# Init TMux
+tmux
+
 alias instala="sudo apt-fast install -y"
 alias informa="sudo apt install"
 # If you come from bash you might have to change your $PATH.

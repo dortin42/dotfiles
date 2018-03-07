@@ -116,7 +116,7 @@ set relativenumber      " show numbers as relative by default
 set showmatch           " higlight matching parentheses and brackets
 
 " Vim-move Alt dont works
-let g:move_key_modifier = 'C-S'
+let g:move_key_modifier = 'S'
 
 " Emmet Ctrl+b+,
 let mapleader=","
@@ -170,3 +170,6 @@ augroup VimCSS3Syntax
 
     autocmd FileType css setlocal iskeyword+=-
 augroup END
+
+" GUI Font's
+set guifont=Droid
