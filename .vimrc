@@ -15,40 +15,45 @@ end
 call plug#begin('~/.vim/plugged/')
 
 " General purpose plugins
-Plug 'terryma/vim-multiple-cursors'
+Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl + d
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'ap/vim-buftabline'
-Plug 'mattn/emmet-vim'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'scrooloose/nerdtree'
-Plug 'bling/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'ryanoasis/vim-devicons'
+Plug 'airblade/vim-gitgutter' " Git marks for add, remove, or modify a line
+Plug 'ctrlpvim/ctrlp.vim' " Search with Ctrl + t
+Plug 'ap/vim-buftabline' " Tabs for Vim buffers
+Plug 'mattn/emmet-vim' " Emmet Ctrl + b + , in normal or insert mode
+Plug 'scrooloose/nerdtree' " Display a tree view for archives with , + n + t
+Plug 'bling/vim-airline' " Status bar
+Plug 'vim-airline/vim-airline-themes' " Themes for status bar
+Plug 'ryanoasis/vim-devicons' " Display icons on multiple plugins like ctrlp, NERDtree, and airline
 Plug 'raimondi/delimitmate'
-Plug 'shougo/neocomplete.vim'
-Plug 'scrooloose/nerdcommenter'
-Plug 'vim-scripts/AutoComplPop'
+Plug 'shougo/neocomplete.vim' " Autocomplete filenames and other stuff
+Plug 'scrooloose/nerdcommenter' " , + c + i/s/and much other for comment a line or a block of text (,+c+i = toggle comment)
+Plug 'chrisbra/colorizer' " Display CSS colors
+Plug 'DougBeney/pickachu' " Pick some stuff like colors, or files
+Plug 'matze/vim-move' " Move a line or selection with Shift + j/k
 
 " Language support
-Plug 'scrooloose/syntastic' 
-Plug 'othree/html5.vim'
-Plug 'stanangeloff/php.vim'
-Plug 'shawncplus/phpcomplete.vim'
-Plug 'ap/vim-css-color'
-Plug 'hail2u/vim-css3-syntax'
-Plug 'othree/javascript-libraries-syntax.vim'
-Plug 'vim-ruby/vim-ruby'
-Plug 'matze/vim-move'
-Plug 'sheerun/vim-polyglot'
+Plug 'editorconfig/editorconfig-vim' " Vim syntax for .vimrc
+Plug 'scrooloose/syntastic' " Vim syntax checker
+Plug 'shawncplus/phpcomplete.vim' " PHP autocomplete
+Plug 'ap/vim-css-color' " Display CSS colors
+Plug 'hail2u/vim-css3-syntax' " CSS3 syntax checker
 Plug 'wlangstroth/vim-racket'
-Plug 'valloric/youcompleteme'
-Plug 'ervandew/supertab'
 Plug 'tfnico/vim-gradle'
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-endwise'
-Plug 'alvan/vim-closetag'
+Plug 'tpope/vim-rails' " Vim Rails productivity (I strongly recommend read the wiki)
+Plug 'tpope/vim-endwise' " Autoclose ',(,{,[
+Plug 'alvan/vim-closetag' " Autoclose HTML tags
+Plug 'sheerun/vim-polyglot' " Better autocomplete for:
+Plug 'othree/html5.vim' " HTML 5
+Plug 'othree/javascript-libraries-syntax.vim' " JavaScript
+Plug 'vim-ruby/vim-ruby' " Ruby
+Plug 'stanangeloff/php.vim' " PHP
+Plug 'cakebaker/scss-syntax.vim' " SASS
+Plug 'fatih/vim-go' " GO (read the wiki PLS)
+Plug 'stephpy/vim-yaml' " YAML
+Plug 'keith/tmux.vim' " TMUX (only syntax highlight)
+Plug 'chr4/nginx.vim' " NGINX
+Plug 'udalov/kotlin-vim' " Kotlin
 
 " Colorschemes
     Plug 'morhetz/gruvbox'
@@ -115,13 +120,20 @@ set number              " show line numbers
 set relativenumber      " show numbers as relative by default
 set showmatch           " higlight matching parentheses and brackets
 
+syn on
+syntax on
+
+set guifont=droid
+
 " Vim-move Alt dont works
 let g:move_key_modifier = 'S'
 
 " Emmet Ctrl+b+,
 let mapleader=","
 let g:user_emmet_leader_key='<C-b>'
+
 colorscheme gruvbox
+
 " Make window navigation less painful.
 map <C-h> <C-w>h
 map <C-j> <C-w>j
@@ -138,38 +150,58 @@ let g:multi_cursor_start_key='<C-d>'
 " Move CtrlP to CtrlT (CtrlP is for buffers)
 let g:ctrlp_map = '<C-t>'
 
-" Autoload Neocomplete
-let g:neocomplete#enable_at_startup = 1
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" working with buffers is cool.
+map <c-n>  :bnext<cr>
+map <c-p>  :bprev<cr>
+imap <c-n> <esc>:bnext<cr>a
+imap <c-p> <esc>:bprev<cr>a
 
-" Working with buffers is cool.
-map <C-N>  :bnext<CR>
-map <C-P>  :bprev<CR>
-imap <C-N> <Esc>:bnext<CR>a
-imap <C-P> <Esc>:bprev<CR>a
-
-" Relative numbering is pretty useful for motions (3g, 5k...). However I'd
+" relative numbering is pretty useful for motions (3g, 5k...). however i'd
 " prefer to have a way for switching relative numbers with a single map.
-nmap <F5> :set invrelativenumber<CR>
-imap <F5> <ESC>:set invrelativenumber<CR>a
+nmap <f5> :set invrelativenumber<cr>
+imap <f5> <esc>:set invrelativenumber<cr>a
 
-map <Leader>nt :NERDTreeToggle<CR>
-let NERDTreeQuitOnOpen=1
-let NERDTreeWinSize=20
+" Personalized keys
+nnoremap <CR> i<CR><esc> " Insert an enter in normal mode
+nnoremap ss i<space><esc> " Insert a space in normal mode
 
-" JavaScript libraries
+map <leader>nt :NERDTreeToggle<cr>
+let nerdtreequitonopen=1
+let nerdtreewinsize=20
+
+" javascript libraries
 let g:used_javascript_libs = 'underscore,backbone,jquery,angularjs,angularui,react,vue'
 
-" Syntax
-syn on
-syntax on
 
-" Correct highlight for CSS files
-augroup VimCSS3Syntax
+" correct highlight
+augroup vimcss3syntax
     autocmd!
 
-    autocmd FileType css setlocal iskeyword+=-
-augroup END
+    autocmd filetype css setlocal iskeyword+=-
+augroup end
+au BufRead,BufNewFile *.scss set filetype=scss.css
+autocmd FileType scss set iskeyword+=-
 
-" GUI Font's
-set guifont=Droid
+
+" Autoload neocomplete
+let g:neocomplete#enable_at_startup = 1
+inoremap <expr><tab>  pumvisible() ? "\<c-n>" : "\<tab>"
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#sources#syntax#min_keyword_length = 4
+
+" Pickachu cfg
+"Mapping the default color picker to alt+c:
+map <A-c> :Pickachu<CR>
+"Mapping the file chooser to alt+f:
+map <A-f> :Pickachu file<CR>
+"Mapping the date chooser to alt+d:
+map <A-d> :Pickachu date<CR>
+
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
