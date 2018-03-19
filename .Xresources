@@ -1,6 +1,7 @@
 ! hard contrast: *background: #1d2021
-*background: #282828
-! soft contrast: *background: #32302f
+!*background: rgba:0040/0040/0040/c800
+! soft contrast: 
+URxvt*background: rgba:0050/0048/0047/c800
 *foreground: #ebdbb2
 ! Black + DarkGrey
 *color0:  #282828
@@ -27,4 +28,57 @@
 *color7:  #a89984
 *color15: #ebdbb2
 ! Vim Powerline Fonts
-URxvt*font: xft:Hack:size=12
+URxvt*font: xft:Hack:size=11
+! Window title: nintF1link
+URxvt*title:nintF1link
+! Icon
+! URxvt*iconFile:/usr/share/icons/Numix-Circle/48/apps/0ad.svg
+! Hide scrollbars
+URxvt*scrollBar:false
+! Transparency
+URxvt*depth: 32
+! Blink cursor
+URxvt*cursorBlink:true
+! Tabs
+! URxvt.perl-ext-commoni:default, tabbed
+! URxvt.tabbed.tab-bg:#000000
+! URxvt.tabbed.tab-fg:#ffffff
+! URxvt.tabbed.tabbar-bg:#000000
+! URxvt.tabbed.tabbar-fg:#ffffff
+
+rofi.color-enabled: true
+! first two color-window were a013191c
+! a6 = 65% amount of black needed over white for white to be a 7 contrast score
+! b3 = 70%
+! 80 = 50%
+! rofi.line-margin: 31
+! rofi.font: Roboto Light 30
+! rofi.padding: 168
+rofi.fullscreen: true
+! rofi.display-drun: 
+! rofi.display-window: win
+! rofi.display-combi: myprompt
+rofi.color-enabled: true
+! rofi.separator-style: none
+rofi.color-window: argb:DA222222, argb:DA222222, argb:00222222
+rofi.color-normal: argb:00000000, #e8e8e8, argb:00000000, argb:00000000, #e56aef
+rofi.color-urgent: argb:00000000, #f43753, argb:00000000, argb:00000000, #e56aef
+rofi.color-active: argb:00000000, #49bbfb, argb:00000000, argb:00000000, #e56aef
+
+! rofi.font: System San Francisco Display 20
+rofi.font: Quicksand 20
+! rofi.fg: argb:00ffffff
+rofi.eh: 1
+rofi.line-margin: 20
+rofi.separator-style: solid
+rofi.hide-scrollbar: true
+rofi.lines: 7
+rofi.width: 50
+rofi.padding: 200
+rofi.bw: 0 
+rofi.auto-select: false 
+rofi.fuzzy: true
+rofi.scroll-method: 1
+rofi.window-format: {w:5} {t}
+rofi.mesg: "hello"
+rofi.show-icons: true
