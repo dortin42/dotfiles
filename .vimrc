@@ -62,8 +62,6 @@ call plug#end()
 " Stop acting like classic vi
 set nocompatible            " disable vi compatibility mode
 set history=1000            " increase history size
-set noswapfile              " don't create swapfiles
-set nobackup                " don't backup, use git!
 
 " Modify indenting settings
 set autoindent              " autoindent always ON.
@@ -77,10 +75,10 @@ set backspace=indent,eol,start " backspace always works on insert mode
 set hidden
 
 " Some programming languages work better when only 2 spaces padding is used.
-autocmd FileType html,css,sass,scss,javascript setlocal sw=2 sts=2
-autocmd FileType json setlocal sw=2 sts=2
-autocmd FileType ruby,eruby setlocal sw=2 sts=2
-autocmd FileType yaml setlocal sw=2 sts=2
+autocmd FileType html,css,sass,scss,javascript setlocal sw=4 sts=4
+autocmd FileType json setlocal sw=4 sts=4
+autocmd FileType ruby,eruby setlocal sw=4 sts=4
+autocmd FileType yaml setlocal sw=4 sts=4
 
 " Required for alvan/vim-closetag
 let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.html.erb,*.xml.erb,*.xml"
