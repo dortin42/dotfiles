@@ -185,7 +185,7 @@ autocmd FileType scss set iskeyword+=-
 let g:neocomplete#enable_at_startup = 1
 inoremap <expr><tab>  pumvisible() ? "\<c-n>" : "\<tab>"
 let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 4
+let g:neocomplete#sources#syntax#min_keyword_length = 2
 
 " Pickachu cfg
 "Mapping the default color picker to alt+c:
