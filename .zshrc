@@ -4,6 +4,14 @@ if [ "$PaqueteTMux" != "" ]; then
     tmux
 fi
 
+# Preferred editor for local and remote sessions
+# Change MVIM for VIM
+PaqueteVIM=$(dpkg --get-selections | grep -w vim | grep -w install)
+if [ "$PaqueteVIM" != "" ]; then
+    export EDITOR="vim"
+else
+    export EDITOR="nano"
+fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -57,7 +65,7 @@ HIST_STAMPS="dd.mm.yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git rails npm pip nyan python sudo sublime web-search git-extras vagrant wd)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -67,13 +75,6 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 export LANG=es_ES.UTF-8
-
-# Preferred editor for local and remote sessions
- if [[ -n $SSH_CONNECTION ]]; then
-   export EDITOR='vim'
- else
-   export EDITOR='mvim'
- fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -97,22 +98,10 @@ alias informa="sudo apt install"
 # Load the oh-my-zsh's library
 antigen use oh-my-zsh
 
-antigen bundle git
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-completions
 antigen bundle nviennot/zsh-vim-plugin
-antigen bundle rails
-antigen bundle npm
-antigen bundle nyan
-antigen bundle pip
-antigen bundle python
-antigen bundle sublime
-antigen bundle sudo
-antigen bundle web-search
-antigen bundle git-extras
-antigen bundle vagrant
-antigen bundle wd
 
 # Load the theme
 antigen theme https://github.com/caiogondim/bullet-train-oh-my-zsh-theme bullet-train

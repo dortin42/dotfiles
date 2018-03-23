@@ -160,8 +160,7 @@ nmap <f5> :set invrelativenumber<cr>
 imap <f5> <esc>:set invrelativenumber<cr>a
 
 " Personalized keys
-nnoremap <CR> i<CR><esc> " Insert an enter in normal mode
-nnoremap ss i<space><esc> " Insert a space in normal mode
+nnoremap <space> i<space><esc> " Insert a space in normal mode
 
 map <leader>nt :NERDTreeToggle<cr>
 let nerdtreequitonopen=1
@@ -185,7 +184,7 @@ autocmd FileType scss set iskeyword+=-
 let g:neocomplete#enable_at_startup = 1
 inoremap <expr><tab>  pumvisible() ? "\<c-n>" : "\<tab>"
 let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 2
+let g:neocomplete#sources#syntax#min_keyword_length = 4
 
 " Pickachu cfg
 "Mapping the default color picker to alt+c:
