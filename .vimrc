@@ -16,6 +16,7 @@ call plug#begin('~/.vim/plugged/')
 
 " General purpose plugins
 Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl + d
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter' " Git marks for add, remove, or modify a line
 Plug 'ctrlpvim/ctrlp.vim' " Search with Ctrl + t
