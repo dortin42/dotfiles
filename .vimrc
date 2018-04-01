@@ -74,6 +74,7 @@ set softtabstop=4           " remove a full pseudo-TAB when i press <BS>
 set encoding=utf-8          " always use unicode (god damnit, windows)
 set backspace=indent,eol,start " backspace always works on insert mode
 set hidden
+set ic hls is " better search
 
 " Some programming languages work better when only 2 spaces padding is used.
 autocmd FileType html,css,sass,scss,javascript setlocal sw=4 sts=4
@@ -118,9 +119,6 @@ set nowrap              " don't wrap long lines
 set number              " show line numbers
 set relativenumber      " show numbers as relative by default
 set showmatch           " higlight matching parentheses and brackets
-
-syn on
-syntax on
 
 set guifont=droid
 
@@ -203,3 +201,12 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+" Ruby
+let g:ruby_indent_access_modifier_style = 'indent'
+let g:ruby_indent_block_style = 'do'
+
+" Vim Surround
+autocmd FileType php let b:surround_45 = "<?php \r ?>"
+autocmd FileType erb let b:surround_45 = "<% \r %>"
+autocmd FileType erb let b:surround_61 = "<%= \r %>"
