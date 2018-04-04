@@ -15,6 +15,8 @@ end
 call plug#begin('~/.vim/plugged/')
 
 " General purpose plugins
+Plug 'andymass/vim-matchup'
+Plug 'KabbAmine/zeavim.vim'
 Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl + d
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-fugitive'
@@ -74,7 +76,7 @@ set softtabstop=4           " remove a full pseudo-TAB when i press <BS>
 set encoding=utf-8          " always use unicode (god damnit, windows)
 set backspace=indent,eol,start " backspace always works on insert mode
 set hidden
-set ic hls is " better search
+set is " better search
 
 " Some programming languages work better when only 2 spaces padding is used.
 autocmd FileType html,css,sass,scss,javascript setlocal sw=4 sts=4
