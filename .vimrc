@@ -15,11 +15,12 @@ end
 call plug#begin('~/.vim/plugged/')
 
 " General purpose plugins
-Plug 'andymass/vim-matchup'
-Plug 'KabbAmine/zeavim.vim'
+Plug 'gioele/vim-autoswap' " Please Vim, stop with these swap file messages. Just switch to the correct window!
+Plug 'andymass/vim-matchup' " Better %
+Plug 'KabbAmine/zeavim.vim' " Zeal docs support
 Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl + d
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround' " Puts ({[ etc with yss csW on normal mode, in visual mode S
+Plug 'tpope/vim-fugitive' " Vim + Git = <3
 Plug 'airblade/vim-gitgutter' " Git marks for add, remove, or modify a line
 Plug 'ctrlpvim/ctrlp.vim' " Search with Ctrl + t
 Plug 'ap/vim-buftabline' " Tabs for Vim buffers
@@ -31,9 +32,9 @@ Plug 'ryanoasis/vim-devicons' " Display icons on multiple plugins like ctrlp, NE
 Plug 'raimondi/delimitmate'
 Plug 'shougo/neocomplete.vim' " Autocomplete filenames and other stuff
 Plug 'scrooloose/nerdcommenter' " , + c + i/s/and much other for comment a line or a block of text (,+c+i = toggle comment)
-Plug 'chrisbra/colorizer' " Display CSS colors
-Plug 'DougBeney/pickachu' " Pick some stuff like colors, or files
 Plug 'matze/vim-move' " Move a line or selection with Shift + j/k
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+" Plug 'chrisbra/colorizer' " Display CSS colors
 
 " Language support
 Plug 'editorconfig/editorconfig-vim' " Vim syntax for .vimrc
@@ -46,17 +47,19 @@ Plug 'tfnico/vim-gradle'
 Plug 'tpope/vim-rails' " Vim Rails productivity (I strongly recommend read the wiki)
 Plug 'tpope/vim-endwise' " Autoclose ',(,{,[
 Plug 'alvan/vim-closetag' " Autoclose HTML tags
+Plug 'leafgarland/typescript-vim' " TypeScript
+Plug 'Quramy/tsuquyomi' " TypeScript complete
 Plug 'sheerun/vim-polyglot' " Better autocomplete for:
 Plug 'othree/html5.vim' " HTML 5
 Plug 'othree/javascript-libraries-syntax.vim' " JavaScript
 Plug 'vim-ruby/vim-ruby' " Ruby
 Plug 'stanangeloff/php.vim' " PHP
 Plug 'cakebaker/scss-syntax.vim' " SASS
-Plug 'fatih/vim-go' " GO (read the wiki PLS)
 Plug 'stephpy/vim-yaml' " YAML
 Plug 'keith/tmux.vim' " TMUX (only syntax highlight)
 Plug 'chr4/nginx.vim' " NGINX
-Plug 'udalov/kotlin-vim' " Kotlin
+" Plug 'fatih/vim-go' " GO (read the wiki PLS)
+" Plug 'udalov/kotlin-vim' " Kotlin
 
 " Colorschemes
     Plug 'morhetz/gruvbox'
@@ -162,14 +165,14 @@ imap <f5> <esc>:set invrelativenumber<cr>a
 
 " Personalized keys
 nnoremap <space> i<space><esc> " Insert a space in normal mode
+nnoremap <CR> i<CR><esc> " Insert an Enter in normal mode
 
 map <leader>nt :NERDTreeToggle<cr>
 let nerdtreequitonopen=1
 let nerdtreewinsize=20
 
 " javascript libraries
-let g:used_javascript_libs = 'underscore,backbone,jquery,angularjs,angularui,react,vue'
-
+let g:used_javascript_libs = 'jquery,react,vue'
 
 " correct highlight
 augroup vimcss3syntax
@@ -186,14 +189,6 @@ let g:neocomplete#enable_at_startup = 1
 inoremap <expr><tab>  pumvisible() ? "\<c-n>" : "\<tab>"
 let g:neocomplete#enable_smart_case = 1
 let g:neocomplete#sources#syntax#min_keyword_length = 4
-
-" Pickachu cfg
-"Mapping the default color picker to alt+c:
-map <A-c> :Pickachu<CR>
-"Mapping the file chooser to alt+f:
-map <A-f> :Pickachu file<CR>
-"Mapping the date chooser to alt+d:
-map <A-d> :Pickachu date<CR>
 
 " Syntastic
 set statusline+=%#warningmsg#
