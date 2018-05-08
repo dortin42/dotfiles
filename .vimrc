@@ -29,12 +29,11 @@ Plug 'scrooloose/nerdtree' " Display a tree view for archives with , + n + t
 Plug 'bling/vim-airline' " Status bar
 Plug 'vim-airline/vim-airline-themes' " Themes for status bar
 Plug 'ryanoasis/vim-devicons' " Display icons on multiple plugins like ctrlp, NERDtree, and airline
-Plug 'raimondi/delimitmate'
+" Plug 'raimondi/delimitmate'
 Plug 'shougo/neocomplete.vim' " Autocomplete filenames and other stuff
 Plug 'scrooloose/nerdcommenter' " , + c + i/s/and much other for comment a line or a block of text (,+c+i = toggle comment)
 Plug 'matze/vim-move' " Move a line or selection with Shift + j/k
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-" Plug 'chrisbra/colorizer' " Display CSS colors
+Plug 'Shougo/vimproc.vim', {'do' : 'make'} " TS compiler with :make
 
 " Language support
 Plug 'editorconfig/editorconfig-vim' " Vim syntax for .vimrc
@@ -113,7 +112,7 @@ else
     set list
 endif
 
-set fillchars+=vert:\   " Remove unpleasant pipes from vertical splits
+" set fillchars+=vert:\   " Remove unpleasant pipes from vertical splits
                         " Sauce on this: http://stackoverflow.com/a/9001540
 
 set showmode            " always show which more are we in
@@ -165,7 +164,7 @@ imap <f5> <esc>:set invrelativenumber<cr>a
 
 " Personalized keys
 nnoremap <space> i<space><esc> " Insert a space in normal mode
-nnoremap <CR> i<CR><esc> " Insert an Enter in normal mode
+nnoremap <CR> i<CR><esc>h " Insert an Enter in normal mode
 
 map <leader>nt :NERDTreeToggle<cr>
 let nerdtreequitonopen=1
