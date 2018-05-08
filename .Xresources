@@ -32,7 +32,7 @@ URxvt.color15: #ebdbb2
 !URxvt.transparent: true
 URxvt.shading:20
 ! Vim Powerline Fonts
-URxvt*font: xft:Hack:size=11
+URxvt*font: xft:DroidSansMono\ Nerd\ Font\:size=10
 ! Window title: nintF1link
 URxvt*title:nintF1link
 ! Icon
