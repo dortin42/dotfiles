@@ -1,4 +1,4 @@
-" nintF1link vimrc settings
+" nintF1link vimrc settings (a fork of danirod settings focussed to general purpose)
 " LICENSE:
 " You are free to read and study this bundle or snippets of it and to use
 " it on your own vimrc settings. Feel free to tweak and adapt my vimrc to
@@ -25,11 +25,11 @@ Plug 'airblade/vim-gitgutter' " Git marks for add, remove, or modify a line
 Plug 'ctrlpvim/ctrlp.vim' " Search with Ctrl + t
 Plug 'ap/vim-buftabline' " Tabs for Vim buffers
 Plug 'mattn/emmet-vim' " Emmet Ctrl + b + , in normal or insert mode
-Plug 'scrooloose/nerdtree' " Display a tree view for archives with , + n + t
+Plug 'scrooloose/nerdtree' " Display a tree view for archives with , + n + t | reload with , + n + t + t
 Plug 'bling/vim-airline' " Status bar
 Plug 'vim-airline/vim-airline-themes' " Themes for status bar
 Plug 'ryanoasis/vim-devicons' " Display icons on multiple plugins like ctrlp, NERDtree, and airline
-" Plug 'raimondi/delimitmate'
+Plug 'raimondi/delimitmate'
 Plug 'shougo/neocomplete.vim' " Autocomplete filenames and other stuff
 Plug 'scrooloose/nerdcommenter' " , + c + i/s/and much other for comment a line or a block of text (,+c+i = toggle comment)
 Plug 'matze/vim-move' " Move a line or selection with Shift + j/k
@@ -64,9 +64,17 @@ Plug 'chr4/nginx.vim' " NGINX
     Plug 'morhetz/gruvbox'
 call plug#end()
 
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+" |-----------------------------------------------------------------------------------------------|
+" |--------------------------------------> settings for VIM <-------------------------------------|
+" |-----------------------------------------------------------------------------------------------|
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+colorscheme gruvbox
+
 " Stop acting like classic vi
 set nocompatible            " disable vi compatibility mode
 set history=1000            " increase history size
+set mouse=a                 " Activate the mouse
 
 " Modify indenting settings
 set autoindent              " autoindent always ON.
@@ -77,18 +85,26 @@ set softtabstop=4           " remove a full pseudo-TAB when i press <BS>
 " Modify some other settings about files
 set encoding=utf-8          " always use unicode (god damnit, windows)
 set backspace=indent,eol,start " backspace always works on insert mode
+set is                      " Instant search
+" set hls ic                " Highlight search and ignore case
 set hidden
-set is " better search
 
-" Some programming languages work better when only 2 spaces padding is used.
-autocmd FileType html,css,sass,scss,javascript setlocal sw=4 sts=4
-autocmd FileType json setlocal sw=4 sts=4
-autocmd FileType ruby,eruby setlocal sw=4 sts=4
-autocmd FileType yaml setlocal sw=4 sts=4
+set showmode                " always show which more are we in
+set laststatus=2            " always show statusbar
+set wildmenu                " enable visual wildmenu
 
-" Required for alvan/vim-closetag
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.html.erb,*.xml.erb,*.xml"
+set nowrap                  " don't wrap long lines
+set number                  " show line numbers
+set relativenumber          " show numbers as relative by default
+set showmatch               " higlight matching parentheses and brackets
 
+set guifont=droid           " You need complaceme.sh or manually install that font and rename the file
+
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+" |-----------------------------------------------------------------------------------------------|
+" |----------------------------------> settings for the terminal <--------------------------------|
+" |-----------------------------------------------------------------------------------------------|
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 " Are we supporting colors?
 if &t_Co > 2 || has("gui_running")
    syntax on
@@ -112,68 +128,18 @@ else
     set list
 endif
 
-" set fillchars+=vert:\   " Remove unpleasant pipes from vertical splits
-                        " Sauce on this: http://stackoverflow.com/a/9001540
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+" |-----------------------------------------------------------------------------------------------|
+" |----------------------------------> settings for the plugins <---------------------------------|
+" |-----------------------------------------------------------------------------------------------|
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+" JavaScript libraries
+let g:used_javascript_libs = 'jquery,react,vue' " that plugin have a lot of more JavaScript libraries, but I only use this
 
-set showmode            " always show which more are we in
-set laststatus=2        " always show statusbar
-set wildmenu            " enable visual wildmenu
+" Required for alvan/vim-closetag
+let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.html.erb,*.xml.erb,*.xml"
 
-set nowrap              " don't wrap long lines
-set number              " show line numbers
-set relativenumber      " show numbers as relative by default
-set showmatch           " higlight matching parentheses and brackets
-
-set guifont=droid
-
-" Vim-move Alt dont works
-let g:move_key_modifier = 'S'
-
-" Emmet Ctrl+b+,
-let mapleader=","
-let g:user_emmet_leader_key='<C-b>'
-
-colorscheme gruvbox
-
-" Make window navigation less painful.
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-
-" Mapping for multiple-cursors
-let g:multi_cursor_prev_key='<C-x>'
-let g:multi_cursor_next_key='<C-d>'
-let g:multi_cursor_skip_key='<C-l>'
-let g:multi_cursor_quit_key='<Esc>'
-let g:multi_cursor_start_key='<C-d>'
-
-" Move CtrlP to CtrlT (CtrlP is for buffers)
-let g:ctrlp_map = '<C-t>'
-
-" working with buffers is cool.
-map <c-n>  :bnext<cr>
-map <c-p>  :bprev<cr>
-imap <c-n> <esc>:bnext<cr>a
-imap <c-p> <esc>:bprev<cr>a
-
-" relative numbering is pretty useful for motions (3g, 5k...). however i'd
-" prefer to have a way for switching relative numbers with a single map.
-nmap <f5> :set invrelativenumber<cr>
-imap <f5> <esc>:set invrelativenumber<cr>a
-
-" Personalized keys
-nnoremap <space> i<space><esc> " Insert a space in normal mode
-nnoremap <CR> i<CR><esc>h " Insert an Enter in normal mode
-
-map <leader>nt :NERDTreeToggle<cr>
-let nerdtreequitonopen=1
-let nerdtreewinsize=20
-
-" javascript libraries
-let g:used_javascript_libs = 'jquery,react,vue'
-
-" correct highlight
+" Correct highlight in scss files
 augroup vimcss3syntax
     autocmd!
 
@@ -181,7 +147,6 @@ augroup vimcss3syntax
 augroup end
 au BufRead,BufNewFile *.scss set filetype=scss.css
 autocmd FileType scss set iskeyword+=-
-
 
 " Autoload neocomplete
 let g:neocomplete#enable_at_startup = 1
@@ -203,6 +168,53 @@ let g:ruby_indent_access_modifier_style = 'indent'
 let g:ruby_indent_block_style = 'do'
 
 " Vim Surround
-autocmd FileType php let b:surround_45 = "<?php \r ?>"
-autocmd FileType erb let b:surround_45 = "<% \r %>"
-autocmd FileType erb let b:surround_61 = "<%= \r %>"
+autocmd FileType php let b:surround_45 = "<?php \r ?>" " Key -
+autocmd FileType erb let b:surround_45 = "<% \r %>"    " Key -
+autocmd FileType erb let b:surround_61 = "<%= \r %>"   " Key =
+
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+" |-----------------------------------------------------------------------------------------------|
+" |-------------------------------------> personalized keys <-------------------------------------|
+" |-----------------------------------------------------------------------------------------------|
+" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
+nnoremap <space> i<space><esc> " Insert a space in normal mode
+nnoremap <CR> i<CR><esc>h      " Insert an Enter in normal mode
+
+" Vim-move Alt dont works
+let g:move_key_modifier = 'S'
+
+" Emmet Ctrl+b+,
+let mapleader=","
+let g:user_emmet_leader_key='<C-b>'
+
+" Make window navigation less painful.
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+
+" Mapping for multiple-cursors
+let g:multi_cursor_prev_key='<C-x>'
+let g:multi_cursor_next_key='<C-d>'
+let g:multi_cursor_skip_key='<C-l>'
+let g:multi_cursor_quit_key='<Esc>'
+let g:multi_cursor_start_key='<C-d>'
+
+" Move CtrlP to CtrlT (CtrlP is for buffers)
+let g:ctrlp_map = '<C-t>'
+
+" Working with buffers is cool.
+map <c-n>  :bnext<cr>
+map <c-p>  :bprev<cr>
+imap <c-n> <esc>:bnext<cr>a
+imap <c-p> <esc>:bprev<cr>a
+
+" Relative numbering is pretty useful for motions (3j, 5k...). however i'd
+" prefer to have a way for switching relative numbers with a single map.
+nmap <f5> :set invrelativenumber<cr>
+imap <f5> <esc>:set invrelativenumber<cr>a
+
+map <leader>nt :NERDTreeToggle<cr>
+map <leader>ntt :NERDTree<cr>
+let nerdtreequitonopen=1
+let nerdtreewinsize=17
