@@ -1,16 +1,35 @@
-# Init TMux
-PaqueteTMux=$(dpkg --get-selections | grep -w tmux | grep -w install)
-if [ "$PaqueteTMux" != "" ]; then
-    tmux
+#Know the linux distro
+distro=$(lsb_release -si)
+if [ "$distro" = "Solus" ]; then
+    PaqueteTMux=$(eopkg bl tmux)
+    PaqueteVIM=$(eopkg bl vim)
+    PaqueteNVIM=$(eopkg bl neovim)
+    alias instala="sudo eopkg it -y"
+    alias informa="sudo eopkg bl"
+elif [ "$distro" = "Ubuntu" ]; then
+    PaqueteTMux=$(dpkg --get-selections | grep -w tmux | grep -w install)
+    PaqueteVIM=$(dpkg --get-selections | grep -w vim | grep -w install)
+    PaqueteNVIM=$(dpkg --get-selections | grep -w nvim | grep -w install)
+    alias instala="sudo apt-fast install -y"
+    alias informa="sudo apt install"
 fi
+if [ "$distro" != "" ]; then
+    # Init TMux
+    if [ "$PaqueteTMux" != "" ]; then
+        tmux
+    fi
 
-# Preferred editor for local and remote sessions
-# Change MVIM for VIM
-PaqueteVIM=$(dpkg --get-selections | grep -w vim | grep -w install)
-if [ "$PaqueteVIM" != "" ]; then
-    export EDITOR="vim"
-else
-    export EDITOR="nano"
+    # Preferred editor for local and remote sessions
+    # Change MVIM for VIM
+    if [ "$PaqueteVIM" != "" ]; then
+        export EDITOR="vim"
+    elif [ "$PaqueteNVIM" != "" ]; then
+        export EDITOR="nvim"
+        alias vim="nvim"
+        alias vi="nvim"
+    else
+        export EDITOR="nano"
+    fi
 fi
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -46,7 +65,7 @@ export ZSH=$HOME/.oh-my-zsh
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -65,7 +84,7 @@ HIST_STAMPS="dd.mm.yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(bundler git rails npm pip nyan python sudo sublime web-search git-extras vagrant wd)
+plugins=(bundler git rails npm pip python sudo sublime web-search git-extras vagrant wd)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -90,21 +109,22 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias instala="sudo apt-fast install -y"
-alias informa="sudo apt install"
 
  source $HOME/antigen.zsh
-     
+
 # Load the oh-my-zsh's library
 antigen use oh-my-zsh
 
 antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-completions
-antigen bundle nviennot/zsh-vim-plugin
+antigen bundle lukechilds/zsh-nvm
 
 # Load the theme
 antigen theme https://github.com/caiogondim/bullet-train-oh-my-zsh-theme bullet-train
 
 # Tell antigen that you're done
 antigen apply
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
