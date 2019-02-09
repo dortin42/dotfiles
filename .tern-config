@@ -1,0 +1,22 @@
+{
+    "libs": [
+        "browser",
+        "jquery",
+        "react",
+        "vue",
+        "vuex",
+        "vue-resource",
+        "superagent",
+        "ecma6"
+    ],
+    "plugins": {
+        "doc_comment": null,
+        "es_modules": {},
+        "jsx": {},
+        "node": {}
+    },
+    "dontLoad": [
+        "node_modules/**"
+    ],
+    "ecmaVersion": 6
+}
