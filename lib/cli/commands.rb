@@ -13,6 +13,7 @@ module Cli
     end
 
     register :Example, "example", "cli/commands/example"
+    register :Install, "install", "cli/commands/install"
     register :Help,    "help",    "cli/commands/help"
   end
 end
