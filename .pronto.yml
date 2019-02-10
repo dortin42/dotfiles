@@ -1,0 +1,4 @@
+all:
+  exclude:
+    - 'spec/**/*'
+PRONTO_GITLAB_API_PRIVATE_TOKEN: 2FdoqxiWyRU-VB6e_yCq

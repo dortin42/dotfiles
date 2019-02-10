@@ -1,0 +1,57 @@
+require: rubocop-rspec
+
+# Commonly used screens these days easily fit more than 80 characters.
+Metrics/LineLength:
+  Max: 120
+
+# Single quotes being faster is hardly measurable and only affects parse time.
+# Enforcing double quotes reduces the times where you need to change them
+# when introducing an interpolation. Use single quotes only if their semantics
+# are needed.
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+# We do not need to support Ruby 1.9, so this is good to use.
+Style/SymbolArray:
+  Enabled: true
+
+# Mixing the styles looks just silly.
+Style/HashSyntax:
+  EnforcedStyle: ruby19_no_mixed_keys
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Layout/ClassStructure:
+  Categories:
+    module_inclusion:
+      - prepend
+      - include
+      - extend
+    association:
+      - has_many
+      - has_one
+    attribute:
+      - attr_accessor
+      - attr_writer
+      - attr_reader
+    ExpectedOrder:
+      - module_inclusion
+      - constants
+      - initializer
+      - public_class_methods
+      - public_methods
+      - private_methods
+      - protected_methods
+
+Layout/IndentationConsistency:
+  EnforcedStyle: rails
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
