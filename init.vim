@@ -17,12 +17,6 @@ end
 call plug#begin("~/.config/nvim/plugged/")
 
 " General purpose plugins
-Plug 'mhinz/vim-startify' " vim better dashboard (init screen)
-Plug 'FooSoft/vim-argwrap' " wrap and unwrap hashes and arrays with ,a
-Plug 'justinmk/vim-sneak' " better doc movs like f but with t{char}{char}
-Plug 'itchyny/vim-cursorword' " Underlines the word under the cursor
-Plug 'unblevable/quick-scope' " magic with f
-Plug 'azadkuh/vim-cmus' " cmus remote control
 Plug 'gioele/vim-autoswap' " Please Vim, stop with these swap file messages. Just switch to the correct window!
 Plug 'francoiscabrol/ranger.vim' " Open ranger inside NVIM ,m
 Plug 'rbgrouleff/bclose.vim' " close buffer without close the window <leader>bd
@@ -59,6 +53,13 @@ Plug 'MattesGroeger/vim-bookmarks' " better bookmarks handle, please read the Re
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " :Gist, see the wiki please
 Plug 'mbbill/undotree' " Undo tree, see the wiki please
+Plug 'mhinz/vim-startify' " vim better dashboard (init screen)
+Plug 'FooSoft/vim-argwrap' " wrap and unwrap hashes and arrays with ,a
+Plug 'AndrewRadev/splitjoin.vim' " wrap code statements gS and gJ
+Plug 'justinmk/vim-sneak' " better doc movs like f but with t{char}{char}
+Plug 'itchyny/vim-cursorword' " Underlines the word under the cursor
+Plug 'unblevable/quick-scope' " magic with f
+Plug 'azadkuh/vim-cmus' " cmus remote control
 
 " Language support
 Plug 'scrooloose/syntastic' " Vim syntax checker
@@ -117,7 +118,8 @@ set wildignore=*.pyc,*.o,*.obj,*.svn,*.swp,*.class,*.hg,*.DS_Store,*.min.*,*~
 set nocompatible            " disable vi compatibility mode
 set history=1000            " increase history size
 set mouse=a                 " Activate the mouse
-set synmaxcol=250
+set synmaxcol=200           " Some times the line is too long, is good idea disable color syntax
+set splitbelow splitright   " change split direction
 let mapleader=","
 
 " Modify indenting settings
@@ -140,11 +142,11 @@ set is                      " Instant search
 " set hls ic                " Highlight search and ignore case
 set hidden
 
-" Turn backup off, since most stuff is in SVN, git et.c anyway...
+" Turn backup off, since most stuff is in SVN, git etc. anyway...
 set nobackup
 set noswapfile
 
-set noshowmode                " always show which more are we in
+set noshowmode              " always show which more are we in
 set laststatus=2            " always show statusbar
 set wildmenu                " enable visual wildmenu
 
@@ -201,6 +203,9 @@ endif
 " |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 " Markdown
 set conceallevel=0
+
+" CtrlP ignore files in .gitignore file
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
 " Quick scope only with f
 let g:qs_highlight_on_keys = ['f', 'F']
@@ -303,6 +308,7 @@ nnoremap <space> i<space><esc>
 
 " Insert an Enter in normal mode
 nnoremap <CR> i<CR><esc>h
+nnoremap <C-j> 0i<CR><esc>h
 
 " Vim-move Alt dont works
 let g:move_key_modifier = 'S'
@@ -344,13 +350,24 @@ nnoremap <leader>p :tabprevious<CR>
 nnoremap  Y "+y
 vnoremap  Y "+y
 
+" better W
+nnoremap W lWh
+vnoremap W lWh
+
+"Force update file
+nnoremap <F5> :e!<CR>
+inoremap <F5><ESC> :e!<CR>
+
 " Relative numbering is pretty useful for motions (3j, 5k...). however i'd
 " prefer to have a way for switching relative numbers with a single map.
-nmap <f5> :set invrelativenumber<CR>
-imap <f5><esc> :set invrelativenumber<CR>a
+nmap <F6> :set invrelativenumber<CR>
+imap <F6><esc> :set invrelativenumber<CR>a
 
 " Undo tree
-nnoremap <F6> :UndotreeToggle<CR>
+nnoremap <F7> :UndotreeToggle<CR>
+
+" See git branches
+nnoremap <F8> :Twiggy<CR>
 
 " NERDtree
 map <f2> :NERDTreeTabsToggle<CR>
@@ -374,6 +391,7 @@ nnoremap <F4> :source ~/.vim/session <cr>
 " Make indent less painful.
 nnoremap <Tab> >>
 nnoremap <S-Tab> <<
+" idk why this is not working fine
 vnoremap <Tab> >gV
 vnoremap <S-Tab> <gV
 
