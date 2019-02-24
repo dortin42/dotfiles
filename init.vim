@@ -26,6 +26,7 @@ Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl +
 Plug 'tpope/vim-surround' " Puts ({[ etc with yss csW on normal mode, in visual mode S
 Plug 'tpope/vim-repeat' " Repeat surround and other cmd plugins with .
 Plug 'tpope/vim-eunuch' " Better cmd for Vim
+Plug 'tpope/vim-dispatch' " background subprocess
 Plug 'tpope/vim-fugitive' " Vim + Git = <3
 Plug 'sodapopcan/vim-twiggy' " Fugitive extension to work with branches :Twiggy
 Plug 'junegunn/gv.vim' " Fugitive extension to work with logs :GV commit browser :GV! will only list commits that affected the current file
@@ -60,6 +61,7 @@ Plug 'justinmk/vim-sneak' " better doc movs like f but with t{char}{char}
 Plug 'itchyny/vim-cursorword' " Underlines the word under the cursor
 Plug 'unblevable/quick-scope' " magic with f
 Plug 'azadkuh/vim-cmus' " cmus remote control
+Plug 'majutsushi/tagbar' " TagBar
 
 " Language support
 Plug 'scrooloose/syntastic' " Vim syntax checker
@@ -68,7 +70,10 @@ Plug 'tpope/vim-rails' " Vim Rails productivity (I strongly recommend read the w
 Plug 'tpope/vim-endwise' " Autoclose keywords on ruby with 'end'
 Plug 'alvan/vim-closetag' " Autoclose HTML tags
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/deoplete-rct' " ruby
+Plug 'takkii/ruby-dictionary3'
+Plug 'takkii/Bignyanco' " Ruby
+Plug 'rust-lang/rust.vim' " Rust
+Plug 'racer-rust/vim-racer' " Rust x2
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'mhartington/nvim-typescript', {'do': './install.sh'}
 Plug 'Shougo/denite.nvim'
@@ -256,7 +261,7 @@ let g:airline_powerline_fonts = 0
 " Ignore some folders and files for CtrlP indexing
 let g:ctrlp_custom_ignore = {
             \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
-            \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+            \ 'file': '\v\.(exe|so|dll|.DS_Store|.dat|.so)$'
             \ }
 
 " Syntastic
@@ -293,10 +298,17 @@ let g:echodoc_enable_at_startup = 1
 let g:NERDTreeHijackNetrw = 0 " add this line if you use NERDTree
 let g:ranger_replace_netrw = 1 " open ranger when vim open a directory
 let g:ranger_map_keys = 0 " disable default ranger shortcut
-nnoremap <leader>m :Ranger<CR>
 
-" Wrap arrays and hashes
-nnoremap <silent> <leader>a :ArgWrap<CR>
+" Bookmarks
+let g:bookmark_no_default_key_mappings = 1
+
+" NERDTree
+let nerdtreequitonopen=1
+let nerdtreewinsize=17
+
+" Racer
+let g:racer_cmd = "~/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
 
 " |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 " |-----------------------------------------------------------------------------------------------|
@@ -308,9 +320,9 @@ nnoremap <space> i<space><esc>
 
 " Insert an Enter in normal mode
 nnoremap <CR> i<CR><esc>h
-nnoremap <C-j> 0i<CR><esc>h
+nnoremap + 0i<CR><esc>h
 
-" Vim-move Alt dont works
+" Vim-move (Alt key does not work)
 let g:move_key_modifier = 'S'
 
 " Emmet Ctrl+b+,
@@ -354,9 +366,15 @@ vnoremap  Y "+y
 nnoremap W lWh
 vnoremap W lWh
 
-"Force update file
+" Force update file
 nnoremap <F5> :e!<CR>
 inoremap <F5><ESC> :e!<CR>
+
+" Map Ctrl+c to Esc
+inoremap <C-c> <ESC>
+
+" TagBar
+nmap <F9> :TagbarToggle<CR>
 
 " Relative numbering is pretty useful for motions (3j, 5k...). however i'd
 " prefer to have a way for switching relative numbers with a single map.
@@ -372,8 +390,6 @@ nnoremap <F8> :Twiggy<CR>
 " NERDtree
 map <f2> :NERDTreeTabsToggle<CR>
 nmap <leader>r :NERDTreeTabsFind<CR>
-let nerdtreequitonopen=1
-let nerdtreewinsize=17
 
 " Close the current buffer
 nnoremap <leader>q :Bclose<CR>
@@ -398,3 +414,27 @@ vnoremap <S-Tab> <gV
 " Save with Ctrl + s
 nnoremap <C-s> :update<CR>
 inoremap <C-s> <Esc>:update<CR>a
+
+" Ranger
+nnoremap <leader>m :Ranger<CR>
+
+" Wrap arrays and hashes
+nnoremap <silent> <leader>s :ArgWrap<CR>
+
+" Bookmarks
+nmap <Leader><Leader> <Plug>BookmarkToggle
+nmap <Leader>i <Plug>BookmarkAnnotate
+nmap <Leader>a <Plug>BookmarkShowAll
+nmap <Leader>j <Plug>BookmarkNext
+nmap <Leader>k <Plug>BookmarkPrev
+nmap <Leader>c <Plug>BookmarkClear
+nmap <Leader>x <Plug>BookmarkClearAll
+nmap <Leader>kk <Plug>BookmarkMoveUp
+nmap <Leader>jj <Plug>BookmarkMoveDown
+nmap <Leader>g <Plug>BookmarkMoveToLine
+
+" Racer
+au FileType rust nmap gd <Plug>(rust-def)
+au FileType rust nmap gs <Plug>(rust-def-split)
+au FileType rust nmap gx <Plug>(rust-def-vertical)
+au FileType rust nmap <leader>gd <Plug>(rust-doc)

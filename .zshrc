@@ -84,7 +84,7 @@ HIST_STAMPS="dd.mm.yyyy"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(bundler git rails npm pip python sudo sublime web-search git-extras vagrant wd)
+plugins=(bundler git rails npm pip python sudo sublime web-search git-extras vagrant wd colorize colored-man-pages command-not-found cp rsync taskwarrior redis-cli systemd)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -119,6 +119,7 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-completions
 antigen bundle lukechilds/zsh-nvm
+antigen bundle hlissner/zsh-autopair
 
 # Load the theme
 antigen theme https://github.com/caiogondim/bullet-train-oh-my-zsh-theme bullet-train
