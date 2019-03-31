@@ -19,7 +19,7 @@ call plug#begin("~/.config/nvim/plugged/")
 " General purpose plugins
 Plug 'gioele/vim-autoswap' " Please Vim, stop with these swap file messages. Just switch to the correct window!
 Plug 'francoiscabrol/ranger.vim' " Open ranger inside NVIM ,m
-Plug 'rbgrouleff/bclose.vim' " close buffer without close the window <leader>bd
+Plug 'rbgrouleff/bclose.vim' " close buffer without close the window <leader>q
 Plug 'andymass/vim-matchup' " Better %
 Plug 'KabbAmine/zeavim.vim' " Zeal docs support
 Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl + d
@@ -28,6 +28,7 @@ Plug 'tpope/vim-repeat' " Repeat surround and other cmd plugins with .
 Plug 'tpope/vim-eunuch' " Better cmd for Vim
 Plug 'tpope/vim-dispatch' " background subprocess
 Plug 'tpope/vim-fugitive' " Vim + Git = <3
+Plug 'tpope/vim-abolish' " Better substitutions :%Subvert/facilit{y,ies}/building{,s}/g and toggle cases MixedCase (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-), dot.case (cr.), space case (cr<space>), and Title Case (crt)
 Plug 'sodapopcan/vim-twiggy' " Fugitive extension to work with branches :Twiggy
 Plug 'junegunn/gv.vim' " Fugitive extension to work with logs :GV commit browser :GV! will only list commits that affected the current file
 Plug 'airblade/vim-gitgutter' " Git marks for add, remove, or modify a line
@@ -41,7 +42,7 @@ Plug 'mileszs/ack.vim' " :Ack pattern and :Gqfopen
 Plug 'bling/vim-airline' " Status bar
 Plug 'vim-airline/vim-airline-themes' " Themes for status bar
 Plug 'ryanoasis/vim-devicons' " Display icons on multiple plugins like ctrlp, NERDtree, and airline
-Plug 'jiangmiao/auto-pairs' " Autoclose ',(,{,[
+Plug 'Raimondi/delimitMate' " Autoclose ',(,{,[
 Plug 'roxma/nvim-yarp'
 Plug 'scrooloose/nerdcommenter' " , + c + i/s/and much other for comment a line or a block of text (,+c+i = toggle comment)
 Plug 'matze/vim-move' " Move a line or selection with Shift + j/k
@@ -54,14 +55,11 @@ Plug 'MattesGroeger/vim-bookmarks' " better bookmarks handle, please read the Re
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " :Gist, see the wiki please
 Plug 'mbbill/undotree' " Undo tree, see the wiki please
-Plug 'mhinz/vim-startify' " vim better dashboard (init screen)
-Plug 'FooSoft/vim-argwrap' " wrap and unwrap hashes and arrays with ,a
 Plug 'AndrewRadev/splitjoin.vim' " wrap code statements gS and gJ
-Plug 'justinmk/vim-sneak' " better doc movs like f but with t{char}{char}
 Plug 'itchyny/vim-cursorword' " Underlines the word under the cursor
 Plug 'unblevable/quick-scope' " magic with f
 Plug 'azadkuh/vim-cmus' " cmus remote control
-Plug 'majutsushi/tagbar' " TagBar
+Plug 'AndrewRadev/switch.vim' " Switch and toggle a lot of things, see the wiki
 
 " Language support
 Plug 'scrooloose/syntastic' " Vim syntax checker
@@ -80,7 +78,7 @@ Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neoinclude.vim'
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/context_filetype.vim'
-Plug 'carlitux/deoplete-ternjs' " js
+"Plug 'carlitux/deoplete-ternjs' " js
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'wellle/tmux-complete.vim'
 Plug 'zchee/deoplete-zsh'
@@ -212,13 +210,6 @@ set conceallevel=0
 " CtrlP ignore files in .gitignore file
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
-" Quick scope only with f
-let g:qs_highlight_on_keys = ['f', 'F']
-
-" Snake
-map t <Plug>Sneak_s
-map T <Plug>Sneak_S
-
 " JS indenting
 let g:jsx_ext_required = 1
 
@@ -310,6 +301,14 @@ let nerdtreewinsize=17
 let g:racer_cmd = "~/.cargo/bin/racer"
 let g:racer_experimental_completer = 1
 
+" DelimitMate
+let g:delimitMate_expand_space = 1
+let g:delimitMate_expand_cr = 2
+let g:delimitMate_expand_inside_quotes = 1
+
+" Quick scope only with f and t
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
 " |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 " |-----------------------------------------------------------------------------------------------|
 " |-------------------------------------> personalized keys <-------------------------------------|
@@ -373,9 +372,6 @@ inoremap <F5><ESC> :e!<CR>
 " Map Ctrl+c to Esc
 inoremap <C-c> <ESC>
 
-" TagBar
-nmap <F9> :TagbarToggle<CR>
-
 " Relative numbering is pretty useful for motions (3j, 5k...). however i'd
 " prefer to have a way for switching relative numbers with a single map.
 nmap <F6> :set invrelativenumber<CR>
@@ -438,3 +434,5 @@ au FileType rust nmap gd <Plug>(rust-def)
 au FileType rust nmap gs <Plug>(rust-def-split)
 au FileType rust nmap gx <Plug>(rust-def-vertical)
 au FileType rust nmap <leader>gd <Plug>(rust-doc)
+
+let g:switch_mapping = "-"
