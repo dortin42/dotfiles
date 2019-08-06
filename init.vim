@@ -7,7 +7,7 @@
 
 " vim-plug is not installed
 if empty(glob("~/.config/nvim/autoload/plug.vim"))
-    silent !npm install -g eslint babel-eslint eslint-plugin-react tern neovim typescript javascript-typescript-langserver
+    silent !npm i -g eslint babel-eslint eslint-plugin-react tern neovim typescript javascript-typescript-langserver
     silent !gem install bundler neovim ripper-tags solargraph --no-ri --no-doc
     silent !curl -fLso ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     autocmd VimEnter * PlugInstall
@@ -18,8 +18,7 @@ call plug#begin("~/.config/nvim/plugged/")
 
 " General purpose plugins
 Plug 'gioele/vim-autoswap' " Please Vim, stop with these swap file messages. Just switch to the correct window!
-Plug 'francoiscabrol/ranger.vim' " Open ranger inside NVIM ,m
-Plug 'rbgrouleff/bclose.vim' " close buffer without close the window <leader>q
+Plug 'rbgrouleff/bclose.vim' " close buffer without close the window <Leader>q
 Plug 'andymass/vim-matchup' " Better %
 Plug 'KabbAmine/zeavim.vim' " Zeal docs support
 Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl + d
@@ -29,6 +28,9 @@ Plug 'tpope/vim-eunuch' " Better cmd for Vim
 Plug 'tpope/vim-dispatch' " background subprocess
 Plug 'tpope/vim-fugitive' " Vim + Git = <3
 Plug 'tpope/vim-abolish' " Better substitutions :%Subvert/facilit{y,ies}/building{,s}/g and toggle cases MixedCase (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-), dot.case (cr.), space case (cr<space>), and Title Case (crt)
+Plug 'tpope/vim-speeddating' " Handle dates
+Plug 'tpope/vim-heroku' " :Heroku
+Plug 'ruanyl/vim-gh-line' " ,gh to open current line in GH
 Plug 'sodapopcan/vim-twiggy' " Fugitive extension to work with branches :Twiggy
 Plug 'junegunn/gv.vim' " Fugitive extension to work with logs :GV commit browser :GV! will only list commits that affected the current file
 Plug 'airblade/vim-gitgutter' " Git marks for add, remove, or modify a line
@@ -55,11 +57,13 @@ Plug 'MattesGroeger/vim-bookmarks' " better bookmarks handle, please read the Re
 Plug 'mattn/webapi-vim'
 Plug 'mattn/gist-vim' " :Gist, see the wiki please
 Plug 'mbbill/undotree' " Undo tree, see the wiki please
+Plug 'FooSoft/vim-argwrap' " wrap and unwrap hashes and arrays with ,a
 Plug 'AndrewRadev/splitjoin.vim' " wrap code statements gS and gJ
 Plug 'itchyny/vim-cursorword' " Underlines the word under the cursor
 Plug 'unblevable/quick-scope' " magic with f
 Plug 'azadkuh/vim-cmus' " cmus remote control
 Plug 'AndrewRadev/switch.vim' " Switch and toggle a lot of things, see the wiki
+Plug 'vim-scripts/todo-vim' " TODO
 
 " Language support
 Plug 'scrooloose/syntastic' " Vim syntax checker
@@ -205,7 +209,7 @@ endif
 " |-----------------------------------------------------------------------------------------------|
 " |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 " Markdown
-set conceallevel=0
+au FileType markdown set conceallevel=0
 
 " CtrlP ignore files in .gitignore file
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
@@ -223,13 +227,13 @@ set runtimepath+=~/.vim-plugins/LanguageClient-neovim
 call deoplete#custom#source('LanguageClient',
             \ 'min_pattern_length',
             \ 2)
+let g:LanguageClient_autoStop = 0
 let g:LanguageClient_serverCommands = {
             \ 'javascript': ['javascript-typescript-stdio'],
             \ 'javascript.jsx': ['javascript-typescript-stdio'],
             \ 'typescript': ['javascript-typescript-stdio'],
-            \ 'ruby': ['tcp://localhost:7658']
+            \ 'ruby': ['solargraph', 'stdio']
             \ }
-let g:LanguageClient_autoStop = 0
 autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
@@ -285,17 +289,15 @@ let g:undotree_SetFocusWhenToggle = 1
 " echodoc
 let g:echodoc_enable_at_startup = 1
 
-" Ranger
-let g:NERDTreeHijackNetrw = 0 " add this line if you use NERDTree
-let g:ranger_replace_netrw = 1 " open ranger when vim open a directory
-let g:ranger_map_keys = 0 " disable default ranger shortcut
-
 " Bookmarks
 let g:bookmark_no_default_key_mappings = 1
 
 " NERDTree
 let nerdtreequitonopen=1
 let nerdtreewinsize=17
+
+" NERDCommenter
+let g:NERDSpaceDelims = 1
 
 " Racer
 let g:racer_cmd = "~/.cargo/bin/racer"
@@ -322,10 +324,10 @@ nnoremap <CR> i<CR><esc>h
 nnoremap + 0i<CR><esc>h
 
 " Vim-move (Alt key does not work)
-let g:move_key_modifier = 'S'
+" let g:move_key_modifier = 'S'
 
 " Emmet Ctrl+b+,
-let g:user_emmet_leader_key='<C-b>'
+let g:user_emmet_Leader_key='<C-b>'
 
 " Make window navigation less painful.
 nmap <BS> <C-W>h
@@ -333,7 +335,7 @@ map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
-nnoremap <C-q> :e#<CR>
+nnoremap <C-q> <C-^>
 
 " Mapping for multiple-cursors
 let g:multi_cursor_use_default_mapping=0
@@ -352,10 +354,10 @@ nnoremap <C-n> :bnext<CR>
 nnoremap <C-p> :bprev<CR>
 nnoremap <C-f> :bfirst<CR>
 nnoremap <C-g> :blast<CR>
-nnoremap <leader>l :tablast<CR>
-nnoremap <leader>f :tabfirst<CR>
-nnoremap <leader>n :tabNext<CR>
-nnoremap <leader>p :tabprevious<CR>
+nnoremap <Leader>l :tablast<CR>
+nnoremap <Leader>f :tabfirst<CR>
+nnoremap <Leader>n :tabNext<CR>
+nnoremap <Leader>p :tabprevious<CR>
 
 " Copy/paste from system clipboard
 nnoremap  Y "+y
@@ -385,10 +387,10 @@ nnoremap <F8> :Twiggy<CR>
 
 " NERDtree
 map <f2> :NERDTreeTabsToggle<CR>
-nmap <leader>r :NERDTreeTabsFind<CR>
+nmap <Leader>r :NERDTreeTabsFind<CR>
 
 " Close the current buffer
-nnoremap <leader>q :Bclose<CR>
+nnoremap <Leader>q :Bclose<CR>
 
 " Autocomplete
 inoremap <expr> <C-J> pumvisible() ? "\<C-n>" : "\<C-J>"
@@ -412,15 +414,15 @@ nnoremap <C-s> :update<CR>
 inoremap <C-s> <Esc>:update<CR>a
 
 " Ranger
-nnoremap <leader>m :Ranger<CR>
+nnoremap <Leader>m :Ranger<CR>
 
 " Wrap arrays and hashes
-nnoremap <silent> <leader>s :ArgWrap<CR>
+nnoremap <silent> <Leader>s :ArgWrap<CR>
 
 " Bookmarks
 nmap <Leader><Leader> <Plug>BookmarkToggle
 nmap <Leader>i <Plug>BookmarkAnnotate
-nmap <Leader>a <Plug>BookmarkShowAll
+nmap <Leader>s <Plug>BookmarkShowAll
 nmap <Leader>j <Plug>BookmarkNext
 nmap <Leader>k <Plug>BookmarkPrev
 nmap <Leader>c <Plug>BookmarkClear
@@ -433,6 +435,16 @@ nmap <Leader>g <Plug>BookmarkMoveToLine
 au FileType rust nmap gd <Plug>(rust-def)
 au FileType rust nmap gs <Plug>(rust-def-split)
 au FileType rust nmap gx <Plug>(rust-def-vertical)
-au FileType rust nmap <leader>gd <Plug>(rust-doc)
+au FileType rust nmap <Leader>gd <Plug>(rust-doc)
 
+nnoremap <silent> <Leader>a :ArgWrap<CR>
+
+" Switch
 let g:switch_mapping = "-"
+
+" Ack
+cnoreabbrev Ack Ack!
+nnoremap <Leader>t :Ack!<Space>
+
+" TODO
+nmap <F9> :TODOToggle<CR>
