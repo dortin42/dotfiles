@@ -20,7 +20,6 @@ call plug#begin("~/.config/nvim/plugged/")
 Plug 'gioele/vim-autoswap' " Please Vim, stop with these swap file messages. Just switch to the correct window!
 Plug 'rbgrouleff/bclose.vim' " close buffer without close the window <Leader>q
 Plug 'andymass/vim-matchup' " Better %
-Plug 'KabbAmine/zeavim.vim' " Zeal docs support
 Plug 'terryma/vim-multiple-cursors' " Multiple cursors with selection and ctrl + d
 Plug 'tpope/vim-surround' " Puts ({[ etc with yss csW on normal mode, in visual mode S
 Plug 'tpope/vim-repeat' " Repeat surround and other cmd plugins with .
@@ -29,15 +28,14 @@ Plug 'tpope/vim-dispatch' " background subprocess
 Plug 'tpope/vim-fugitive' " Vim + Git = <3
 Plug 'tpope/vim-abolish' " Better substitutions :%Subvert/facilit{y,ies}/building{,s}/g and toggle cases MixedCase (crm), camelCase (crc), snake_case (crs), UPPER_CASE (cru), dash-case (cr-), dot.case (cr.), space case (cr<space>), and Title Case (crt)
 Plug 'tpope/vim-speeddating' " Handle dates
-Plug 'tpope/vim-heroku' " :Heroku
 Plug 'ruanyl/vim-gh-line' " ,gh to open current line in GH
 Plug 'sodapopcan/vim-twiggy' " Fugitive extension to work with branches :Twiggy
 Plug 'junegunn/gv.vim' " Fugitive extension to work with logs :GV commit browser :GV! will only list commits that affected the current file
+Plug 'rhysd/git-messenger.vim' " reveal the Git commit message under the cursor ,gm
 Plug 'airblade/vim-gitgutter' " Git marks for add, remove, or modify a line
 Plug 'ctrlpvim/ctrlp.vim' " Search with Ctrl + t
 Plug 'mattn/emmet-vim' " Emmet Ctrl + b + , in normal or insert mode
 Plug 'scrooloose/nerdtree' " Display a tree view for archives with , + n + t
-Plug 'Xuyuanp/nerdtree-git-plugin' " Display git status in nerdtree
 Plug 'jistr/vim-nerdtree-tabs' " NERDTree on every tab
 Plug 'yegappan/greplace' " Use :Gsearch and :Greplace for search and replace in files
 Plug 'mileszs/ack.vim' " :Ack pattern and :Gqfopen
@@ -51,17 +49,16 @@ Plug 'matze/vim-move' " Move a line or selection with Shift + j/k
 Plug 'Shougo/vimproc.vim', {'do' : 'make'} " TS compiler with :make
 Plug 'Yggdroot/indentLine'
 Plug 'roxma/python-support.nvim' " auto pip install with :PythonSupportInitPython3
-Plug 'jsfaint/gen_tags.vim' " :GenGTAGS :GenCtags
 Plug 'jeffkreeftmeijer/vim-numbertoggle' " toggle number lines when changes window
 Plug 'MattesGroeger/vim-bookmarks' " better bookmarks handle, please read the Readme.md on GitHub
 Plug 'mattn/webapi-vim'
-Plug 'mattn/gist-vim' " :Gist, see the wiki please
+" Plug 'mattn/gist-vim' " :Gist, see the wiki please
 Plug 'mbbill/undotree' " Undo tree, see the wiki please
 Plug 'FooSoft/vim-argwrap' " wrap and unwrap hashes and arrays with ,a
 Plug 'AndrewRadev/splitjoin.vim' " wrap code statements gS and gJ
 Plug 'itchyny/vim-cursorword' " Underlines the word under the cursor
 Plug 'unblevable/quick-scope' " magic with f
-Plug 'azadkuh/vim-cmus' " cmus remote control
+" Plug 'azadkuh/vim-cmus' " cmus remote control
 Plug 'AndrewRadev/switch.vim' " Switch and toggle a lot of things, see the wiki
 Plug 'vim-scripts/todo-vim' " TODO
 
@@ -70,7 +67,6 @@ Plug 'scrooloose/syntastic' " Vim syntax checker
 Plug 'ap/vim-css-color' " Display CSS colors
 Plug 'tpope/vim-rails' " Vim Rails productivity (I strongly recommend read the wiki)
 Plug 'tpope/vim-endwise' " Autoclose keywords on ruby with 'end'
-Plug 'alvan/vim-closetag' " Autoclose HTML tags
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'takkii/ruby-dictionary3'
 Plug 'takkii/Bignyanco' " Ruby
@@ -82,33 +78,36 @@ Plug 'Shougo/denite.nvim'
 Plug 'Shougo/neoinclude.vim'
 Plug 'Shougo/neco-vim'
 Plug 'Shougo/context_filetype.vim'
-"Plug 'carlitux/deoplete-ternjs' " js
+" Plug 'carlitux/deoplete-ternjs' " js
 Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 Plug 'wellle/tmux-complete.vim'
 Plug 'zchee/deoplete-zsh'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'Trevoke/ultisnips-rspec'
+Plug 'epilande/vim-react-snippets'
 Plug 'sheerun/vim-polyglot' " Better autocomplete for:
 Plug 'othree/html5.vim' " HTML 5
 Plug 'pangloss/vim-javascript' " JavaScript
 Plug 'maxmellon/vim-jsx-pretty' " JSX
 Plug 'vim-ruby/vim-ruby' " Ruby
-Plug 'stanangeloff/php.vim' " PHP
+" Plug 'stanangeloff/php.vim' " PHP
 Plug 'cakebaker/scss-syntax.vim' " SASS
 Plug 'stephpy/vim-yaml' " YAML
 Plug 'keith/tmux.vim' " TMUX (only syntax highlight)
 Plug 'chr4/nginx.vim' " NGINX
 Plug 'gabrielelana/vim-markdown' " Markdown
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
-Plug 'Shougo/echodoc.vim' " Echo method doc in status bar
 Plug 'wellle/targets.vim' " Better text object handling
+Plug 'lifepillar/pgsql.vim' " PSQL
 " Plug 'fatih/vim-go' " GO (read the wiki PLS)
-" Plug 'udalov/kotlin-vim' " Kotlin
+
+" Fun
+Plug 'PhilRunninger/sokoban.vim'
 
 
 " Colorschemes
-    Plug 'morhetz/gruvbox'
+Plug 'morhetz/gruvbox'
 call plug#end()
 
 " |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
@@ -222,27 +221,24 @@ let g:python_support_python2_require = 0
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 set runtimepath+=~/.vim-plugins/LanguageClient-neovim
 call deoplete#custom#source('LanguageClient',
             \ 'min_pattern_length',
             \ 2)
 let g:LanguageClient_autoStop = 0
 let g:LanguageClient_serverCommands = {
-            \ 'javascript': ['javascript-typescript-stdio'],
-            \ 'javascript.jsx': ['javascript-typescript-stdio'],
-            \ 'typescript': ['javascript-typescript-stdio'],
-            \ 'ruby': ['solargraph', 'stdio']
+            \ 'javascript': ['typescript-language-server', '--stdio'],
+            \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
+            \ 'typescript': ['typescript-language-server', '--stdio'],
+            \ 'typescript.tsx': ['typescript-language-server', '--stdio']
             \ }
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 autocmd FileType ruby setlocal omnifunc=LanguageClient#complete
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<S-tab>"
-
-" Required for alvan/vim-closetag
-let g:closetag_filenames = "*.html,*.xhtml,*.phtml,*.html.erb,*.xml.erb,*.xml"
 
 " Vim indent
 let g:indentLine_enabled = 1
@@ -268,10 +264,11 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['eslint']
-let where_is_ruby = systemlist('which ruby')[0]
-let where_is_rubocop = systemlist('which rubocop')[0]
-let g:syntastic_ruby_checkers = ['rubocop', 'mri']
-let g:syntastic_ruby_rubocop_exec = where_is_ruby . " " . where_is_rubocop
+let g:syntastic_html_checkers = []
+" let where_is_ruby = systemlist('which ruby')[0]
+" let where_is_rubocop = systemlist('which rubocop')[0]
+" let g:syntastic_ruby_checkers = ['rubocop', 'mri']
+" let g:syntastic_ruby_rubocop_exec = where_is_ruby . " " . where_is_rubocop
 
 " Ruby
 let g:ruby_indent_access_modifier_style = 'indent'
@@ -281,10 +278,12 @@ let g:ruby_indent_block_style = 'do'
 autocmd FileType php let b:surround_45 = "<?php \r ?>" " Key -
 autocmd FileType erb let b:surround_45 = "<% \r %>"    " Key -
 autocmd FileType erb let b:surround_61 = "<%= \r %>"   " Key =
+autocmd FileType rb let b:surround_61 = "#{\r}"        " Key =
 
 " Undotree
 let g:undotree_WindowLayout = 4
 let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_DiffAutoOpen = 0
 
 " echodoc
 let g:echodoc_enable_at_startup = 1
@@ -311,6 +310,11 @@ let g:delimitMate_expand_inside_quotes = 1
 " Quick scope only with f and t
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
+" Flay Ruby code smell
+let g:flay_on_open=1
+let g:flay_on_save=1
+let g:flay_piet_text=">>"
+
 " |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
 " |-----------------------------------------------------------------------------------------------|
 " |-------------------------------------> personalized keys <-------------------------------------|
@@ -325,9 +329,6 @@ nnoremap + 0i<CR><esc>h
 
 " Vim-move (Alt key does not work)
 " let g:move_key_modifier = 'S'
-
-" Emmet Ctrl+b+,
-let g:user_emmet_Leader_key='<C-b>'
 
 " Make window navigation less painful.
 nmap <BS> <C-W>h
@@ -413,9 +414,6 @@ vnoremap <S-Tab> <gV
 nnoremap <C-s> :update<CR>
 inoremap <C-s> <Esc>:update<CR>a
 
-" Ranger
-nnoremap <Leader>m :Ranger<CR>
-
 " Wrap arrays and hashes
 nnoremap <silent> <Leader>s :ArgWrap<CR>
 
@@ -448,3 +446,6 @@ nnoremap <Leader>t :Ack!<Space>
 
 " TODO
 nmap <F9> :TODOToggle<CR>
+
+" Copy file path
+nmap <Leader>y :let @+ = expand("%")<CR>
