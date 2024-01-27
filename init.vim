@@ -1,417 +1,675 @@
-" dortin42 vimrc settings (a fork of danirod settings focussed to general purpose)
-" LICENSE:
-" You are free to read and study this bundle or snippets of it and to use
-" it on your own vimrc settings. Feel free to tweak and adapt my vimrc to
-" suit your needs and to make the changes yours. Attribution to this vimrc
-" is not required although is thanked.
+-- Initial settings
+-- Ignore compiled files
+vim.o.wildignore = '*.pyc,*.o,*.obj,*.svn,*.swp,*.class,*.hg,*.DS_Store,*.min.*,*~'
 
-" vim-plug is not installed
-if empty(glob("~/.config/nvim/autoload/plug.vim"))
-    silent !npm i -g eslint babel-eslint eslint-plugin-react tern neovim typescript javascript-typescript-langserver
-    silent !gem install bundler neovim ripper-tags solargraph --no-ri --no-doc
-    silent !curl -fLso ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall
+-- Stop acting like classic vi
+-- disable netrw at the very start of your init.lua
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+vim.o.history = 777 -- increase history size
+vim.o.mouse = "a"   -- Activate the mouse
+-- vim.o.synmaxcol = 200 -- Some times the line is too long, is good idea disable color syntax
+-- ^ thats not a problem with treesitter
+vim.o.splitbelow = true -- change split direction
+vim.o.splitright = true
+vim.g.mapleader = ","
+
+-- Modify indenting settings
+vim.o.autoindent = true       -- autoindent always ON.
+vim.o.expandtab = true        -- expand tabs
+vim.o.shiftwidth = 4          -- spaces for autoindenting
+vim.o.softtabstop = 4         -- remove a full pseudo-TAB when i press <BS>
+vim.cmd('syntax on')          -- Enable syntax highlighting
+vim.cmd('filetype on')        -- Enable filetype detection
+vim.cmd('filetype indent on') -- Enable filetype-specific indenting
+vim.cmd('filetype plugin on') -- Enable filetype-specific plugins
+
+-- Some programming languages work better when only 2 spaces padding is used.
+vim.cmd('autocmd FileType html,css,sass,scss,javascript setlocal sw=2 sts=2')
+vim.cmd('autocmd FileType json setlocal sw=2 sts=2')
+vim.cmd('autocmd FileType ruby,eruby setlocal sw=2 sts=2')
+vim.cmd('autocmd FileType yaml setlocal sw=2 sts=2')
+vim.cmd('autocmd FileType markdown setlocal wrap')
+
+-- Modify some other settings about files
+vim.o.encoding = "utf-8"             -- always use unicode (god damnit, windows)
+vim.o.backspace = "indent,eol,start" -- backspace always works on insert mode
+vim.o.iskeyword = "@"                -- Instant search
+vim.o.hidden = true
+
+-- Turn backup off, since most stuff is in SVN, git etc. anyway...
+vim.o.backup = false
+vim.o.swapfile = false
+
+vim.o.showmode = false       -- always show which mode are we in
+vim.o.laststatus = 2         -- always show statusbar
+vim.o.wildmenu = true        -- enable visual wildmenu
+
+vim.wo.wrap = false          -- don't wrap long lines
+vim.wo.number = true         -- show line numbers
+vim.wo.relativenumber = true -- show numbers as relative by default
+vim.o.showmatch = true       -- higlight matching parentheses and brackets
+
+-- Turn persistent undo on
+-- means that you can undo even when you close a buffer/VIM
+local ok, err = pcall(function()
+    local home = os.getenv("HOME")
+    vim.opt.undodir = string.format("%s/.local/share/nvim/undo/", home)
+    vim.opt.undofile = true
+    vim.opt.undolevels = 777
+    vim.opt.undoreload = 10000
+end)
+
+if not ok then
+    print("Failed to set undo settings: ", err)
 end
 
-" vim-plug plugins
-call plug#begin("~/.config/nvim/plugged/")
+-- Terminal settings
+-- Are we supporting colors?
+if tonumber(vim.o.t_Co) > 2 then
+    vim.cmd('syntax on')
+    vim.wo.colorcolumn = "80"
+    vim.cmd('silent! color gruvbox')
+    vim.o.background = "dark"
+end
 
-" General purpose plugins
-" Plug 'gioele/vim-autoswap' " Please Vim, stop with these swap file messages. Just switch to the correct window!
-Plug 'mg979/vim-visual-multi', {'branch': 'master'} " Multiple cursors with selection and ctrl + d
-Plug 'tpope/vim-surround' " Puts ({[ etc with yss csW on normal mode, in visual mode S
-Plug 'tpope/vim-repeat' " Repeat surround and other cmd plugins with .
-Plug 'tpope/vim-eunuch' " Better cmd for Vim
-Plug 'tpope/vim-dispatch' " background subprocess
-Plug 'tpope/vim-fugitive' " Vim + Git = <3
-Plug 'tpope/vim-abolish' " Better substitutions :%Subvert/facilit{y,ies}/building{,s}/g and toggle cases:
-" MixedCase (crm),
-" camelCase (crc),
-" snake_case (crs),
-" UPPER_CASE (cru),
-" dash-case (cr-),
-" dot.case (cr.),
-" space case (cr<space>),
-" Title Case (crt)
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'lewis6991/gitsigns.nvim'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'mattn/emmet-vim' " Emmet Ctrl + b + , in normal or insert mode
-Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } " Display a tree view for archives with , + n + t
-Plug 'yegappan/greplace', { 'on': ['Gqfopen'] } " Use :Gsearch and :Greplace for search and replace in files
-Plug 'mhinz/vim-grepper', { 'on': ['Grepper', '<plug>(GrepperOperator)', 'GrepperRg'] } " :Grepper pattern and :Gqfopen
-" Plug 'bling/vim-airline' " Status bar
-Plug 'nvim-lualine/lualine.nvim'
-" Plug 'romgrk/barbar.nvim'
-Plug 'chentau/marks.nvim'
-" Plug 'lukas-reineke/indent-blankline.nvim'
-Plug 'SmiteshP/nvim-gps'
-Plug 'jghauser/mkdir.nvim'
+-- Extra fancyness if full pallete is supported.
+if tonumber(vim.o.t_Co) >= 256 then
+    vim.o.termguicolors = true
+    vim.wo.cursorline = true
+    vim.wo.cursorcolumn = true
+end
 
-Plug 'Raimondi/delimitMate' " Autoclose ',(,{,[
-Plug 'roxma/nvim-yarp'
-Plug 'matze/vim-move' " Move a line or selection with Alt + j/k
-Plug 'Shougo/vimproc.vim', {'do' : 'make'} " TS compiler with :make
-" Plug 'roxma/python-support.nvim' " auto pip install with :PythonSupportInitPython3 (not working right now)
-Plug 'mbbill/undotree', { 'on': ['UndotreeToggle'] } " Undo tree, see the wiki please
-Plug 'FooSoft/vim-argwrap' " wrap and unwrap hashes and arrays with ,a
-Plug 'AndrewRadev/splitjoin.vim' " wrap code statements gS and gJ
-Plug 'unblevable/quick-scope' " magic with f
-Plug 'ggandor/lightspeed.nvim'  " magic with s
-Plug 'AndrewRadev/switch.vim' " Switch and toggle a lot of things, see the wiki
-
-" Language support
-Plug 'dense-analysis/ale' " Vim syntax checker
-Plug 'tpope/vim-rails' " Vim Rails productivity (I strongly recommend read the wiki)
-Plug 'tpope/vim-endwise' " Autoclose keywords on ruby with 'end'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'sheerun/vim-polyglot' " text highlight
-Plug 'vim-ruby/vim-ruby' " Better autocomplete and indent for Ruby
-Plug 'maxmellon/vim-jsx-pretty' " JSX
-Plug 'wellle/targets.vim' " Better text object handling
-" Plug 'lifepillar/pgsql.vim' " PSQL
-" Plug 'jalvesaq/Nvim-R', {'branch': 'stable'} " R
-" Plug 'fatih/vim-go' " GO (read the wiki PLS)
-
-" Colorschemes
-Plug 'RRethy/nvim-base16'
-" Plug 'morhetz/gruvbox'
-" Plug 'dortin42/golden-vim'
-call plug#end()
-
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-" |-----------------------------------------------------------------------------------------------|
-" |--------------------------------------> settings for VIM <-------------------------------------|
-" |-----------------------------------------------------------------------------------------------|
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-colorscheme base16-gruvbox-dark-pale
-
-" Ignore compiled files
-set wildignore=*.pyc,*.o,*.obj,*.svn,*.swp,*.class,*.hg,*.DS_Store,*.min.*,*~
-
-" Stop acting like classic vi
-set nocompatible " disable vi compatibility mode
-set history=777 " increase history size
-set mouse=a " Activate the mouse
-set synmaxcol=200 " Some times the line is too long, is good idea disable color syntax
-set splitbelow splitright " change split direction
-let mapleader=","
-
-" Modify indenting settings
-set autoindent " autoindent always ON.
-set expandtab " expand tabs
-set shiftwidth=4 " spaces for autoindenting
-set softtabstop=4 " remove a full pseudo-TAB when i press <BS>
-syntax on             " Enable syntax highlighting
-filetype on           " Enable filetype detection
-filetype indent on    " Enable filetype-specific indenting
-filetype plugin on    " Enable filetype-specific plugins
-
-" Some programming languages work better when only 2 spaces padding is used.
-autocmd FileType html,css,sass,scss,javascript setlocal sw=2 sts=2
-autocmd FileType json setlocal sw=2 sts=2
-autocmd FileType ruby,eruby setlocal sw=2 sts=2
-autocmd FileType yaml setlocal sw=2 sts=2
-autocmd FileType markdown setlocal wrap
-
-" Modify some other settings about files
-set encoding=utf-8 " always use unicode (god damnit, windows)
-set backspace=indent,eol,start " backspace always works on insert mode
-set is " Instant search
-set hidden
-
-" Turn backup off, since most stuff is in SVN, git etc. anyway...
-set nobackup
-set noswapfile
-
-set noshowmode " always show which mode are we in
-set laststatus=2 " always show statusbar
-set wildmenu " enable visual wildmenu
-
-set nowrap " don't wrap long lines
-set number " show line numbers
-set relativenumber " show numbers as relative by default
-set showmatch " higlight matching parentheses and brackets
-
-" => Turn persistent undo on
-"    means that you can undo even when you close a buffer/VIM
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-try
-    set undodir=$HOME/.local/share/nvim/undo/
-    set undofile
-    set undolevels = 777 "maximum number of changes that can be undone
-    set undoreload = 10000 "maximum number lines to save for undo on a buffer reload
-catch
-endtry
-
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-" |-----------------------------------------------------------------------------------------------|
-" |------------------------------------> settings for terminal <----------------------------------|
-" |-----------------------------------------------------------------------------------------------|
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-" Are we supporting colors?
-if &t_Co > 2 || has("gui_running")
-   syntax on
-   set colorcolumn=80
-   silent! color gruvbox
-   set background=dark
-endif
-
-" Extra fancyness if full pallete is supported.
-if &t_Co >= 256 || has("gui_running")
-    set termguicolors
-    set cursorline
-    set cursorcolumn
-endif
-
-" Mark trailing spaces depending on whether we have a fancy terminal or not
-if &t_Co > 2 || has("gui_running")
-    highlight ExtraWhitespace ctermbg=red guibg=red
-    match ExtraWhitespace /\s\+$/
+-- Mark trailing spaces depending on whether we have a fancy terminal or not
+if tonumber(vim.o.t_Co) > 2 then
+    vim.cmd('highlight ExtraWhitespace ctermbg=red guibg=red')
+    vim.cmd('match ExtraWhitespace /\\s\\+$/')
 else
-    set listchars=trail:$
-    set list
-endif
+    vim.o.listchars = "trail:$"
+    vim.wo.list = true
+end
 
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-" |-----------------------------------------------------------------------------------------------|
-" |------------------------------------> settings for plugins <-----------------------------------|
-" |-----------------------------------------------------------------------------------------------|
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-" Markdown
-au FileType markdown set conceallevel=0
+-- Package manager
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+    vim.fn.system({
+        "git",
+        "clone",
+        "--filter=blob:none",
+        "https://github.com/folke/lazy.nvim.git",
+        "--branch=stable", -- latest stable release
+        lazypath,
+    })
+end
+vim.opt.rtp:prepend(lazypath)
 
-" Disable auto pip for python 2 modules
-let g:python_support_python2_require = 0
+vim.g.mapleader = "," -- Make sure to set `mapleader` before lazy so your mappings are correct
 
-" JS indenting
-let g:jsx_ext_required = 1
-
-" Ruby
-let g:loaded_ruby_provider = 0
-let g:ruby_indent_access_modifier_style = 'indent'
-let g:ruby_indent_block_style = 'do'
-
-"ALE
-let g:ale_ruby_rubocop_executable = 'bundle'
-let g:ale_fixers = {
-            \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-            \   'javascript': ['eslint'],
-            \   'ruby': ['rubocop'],
-            \}
-let g:ale_fix_on_save = 1
-
-" Vim Surround
-autocmd FileType erb let b:surround_45 = "<% \r %>" " Key -
-autocmd FileType erb let b:surround_61 = "<%= \r %>" " Key =
-autocmd FileType rb let b:surround_61 = "#{\r}" " Key =
-
-" Undotree
-let g:undotree_WindowLayout = 4
-let g:undotree_SetFocusWhenToggle = 1
-let g:undotree_DiffAutoOpen = 0
-
-" NERDTree
-let nerdtreequitonopen=1
-let nerdtreewinsize=17
-
-" DelimitMate
-let g:delimitMate_expand_space = 1
-let g:delimitMate_expand_cr = 2
-let g:delimitMate_expand_inside_quotes = 1
-
-" Quick scope only with f and t
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-" Coc snippets
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-let g:coc_snippet_next = '<tab>'
-
-" FZF RG
-function! RipgrepFzf(query, fullscreen)
-  let command_fmt = "rg -g '!design/' -g '!dist/' -g '!pnpm-lock.yaml' -g '!.git' -g '!node_modules' --column --line-number --no-heading --color=always --smart-case -- %s || true"
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-
-" Windows copypaste
-let s:clip = '/mnt/c/Windows/System32/clip.exe'
-if executable(s:clip)
-    augroup WSLYank
-        autocmd!
-        autocmd TextYankPost * if v:event.regname=='+' | call system('echo '.shellescape(join(v:event.regcontents)).' | '.s:clip) | endif
-    augroup END
-endif
-
-lua << EOF
-require('gitsigns').setup()
-require('nvim-treesitter.configs').setup {
-  highlight = { enable = true },
-  indent = { enable = false },
-  autotag = { enable = true }
-}
-require('marks').setup({
-default_mappings = true
-})
-require("nvim-gps").setup()
-local gps = require("nvim-gps")
-require('lualine').setup({
-options = {
-    icons_enabled = false,
-    theme = 'gruvbox-material',
-    component_separators = { left = '', right = ''},
-    section_separators = { left = '', right = ''},
-    disabled_filetypes = {},
-    always_divide_middle = true,
+require("lazy").setup({
+    -- General purpose plugins
+    -- 'gioele/vim-autoswap' -- Please Vim, stop with these swap file messages. Just switch to the correct window!
+    { 'github/copilot.vim' },
+    {
+        'mg979/vim-visual-multi',
+        branch = 'master',
+        config = function()
+            -- Mapping for multiple-cursors
+            vim.g.VM_maps = {
+                ["Find Under"] = '<C-d>', -- replace C-n
+                ["Find Subword Under"] = '<C-d>'
+            }
+        end
+    },                        -- Multiple cursors with selection and ctrl + d
+    { 'tpope/vim-surround' }, -- Puts ({[ etc with yss csW on normal mode, in visual mode S
+    { 'tpope/vim-repeat' },   -- Repeat surround and other cmd plugins with .
+    { 'tpope/vim-eunuch' },   -- Better cmd for Vim
+    { 'tpope/vim-dispatch' }, -- background subprocess
+    { 'tpope/vim-fugitive' }, -- Vim + Git = <3
+    { 'tpope/vim-abolish' },  -- Better substitutions :%Subvert/facilit{y,ies}/building{,s}/g and toggle cases:
+    -- MixedCase (crm),
+    -- camelCase (crc),
+    -- snake_case (crs),
+    -- UPPER_CASE (cru),
+    -- dash-case (cr-),
+    -- dot.case (cr.),
+    -- space case (cr<space>),
+    -- Title Case (crt)
+    -- {
+    --     "chrisgrieser/nvim-spider",
+    --     config = function()
+    --         vim.keymap.set({ "n", "o", "x" }, "w", "<cmd>lua require('spider').motion('w')<CR>", { desc = "Spider-w" })
+    --         -- vim.keymap.set({ "n", "o", "x" }, "e", "<cmd>lua require('spider').motion('e')<CR>", { desc = "Spider-e" })
+    --         vim.keymap.set({ "n", "o", "x" }, "b", "<cmd>lua require('spider').motion('b')<CR>", { desc = "Spider-b" })
+    --         vim.keymap.set({ "n", "o", "x" }, "ge", "<cmd>lua require('spider').motion('ge')<CR>", { desc = "Spider-ge" })
+    --     end
+    -- },
+    {
+        'abecodes/tabout.nvim',
+        config = function()
+            require('tabout').setup()
+        end
     },
-sections = {
-    lualine_a = {'mode'},
-    lualine_b = {{'filename', path=1}},
-    lualine_c = {{gps.get_location, cond=gps.is_available}},
-    lualine_x = {'branch', 'diff', {'diagnostics', sources={'nvim_lsp', 'coc'}}},
-    lualine_y = {'encoding'},
-    lualine_z = {'location'}
+    {
+        'NvChad/nvim-colorizer.lua',
+        config = function()
+            require 'colorizer'.setup({
+                user_default_options = {
+                    tailwind = true
+                }
+            })
+        end
     },
-inactive_sections = {
-    lualine_a = {},
-    lualine_b = {'filename'},
-    lualine_c = {},
-    lualine_x = {'location'},
-    lualine_y = {},
-    lualine_z = {}
+    {
+        'nvim-telescope/telescope.nvim',
+        lazy = true,
+        cmd = 'Telescope',
+        dependencies = {
+            {
+                'nvim-lua/plenary.nvim',
+                "debugloop/telescope-undo.nvim"
+            },
+        },
+        config = function()
+            require("telescope").setup({
+                extensions = {
+                    undo = {
+                        use_delta = true,
+                        use_custom_command = nil, -- setting this implies `use_delta = false`. Accepted format is: { "bash", "-c", "echo '$DIFF' | delta" }
+                        side_by_side = false,
+                        diff_context_lines = vim.o.scrolloff,
+                        entry_format = "state #$ID, $STAT, $TIME",
+                        time_format = "",
+                        mappings = {
+                            i = {
+                                -- IMPORTANT: Note that telescope-undo must be available when telescope is configured if
+                                -- you want to replicate these defaults and use the following actions. This means
+                                -- installing as a dependency of telescope in it's `requirements` and loading this
+                                -- extension from there instead of having the separate plugin definition as outlined
+                                -- above.
+                                ["<cr>"] = require("telescope-undo.actions").restore,
+                            }
+                        }
+                    }
+                },
+            })
+            require("telescope").load_extension("undo")
+            vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<cr>")
+        end,
     },
-extensions = {'nerdtree', 'fugitive', 'fzf'},
-tabline = {
-    lualine_a = {{'buffers', show_filename_only=false, mode=2}},
-    lualine_b = {},
-    lualine_c = {},
-    lualine_x = {},
-    lualine_y = {},
-    lualine_z = {'tabs'}
+    {
+        "nvim-treesitter/nvim-treesitter", -- The main reason Im using neovim
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter-textobjects',
+        },
+        build = ':TSUpdate',
+    },
+    { 'lewis6991/gitsigns.nvim' }, -- git hunks on numbers panel
+    { 'mattn/emmet-vim' },         -- Emmet Ctrl + b + , in normal or insert mode
+    {
+        'nvim-tree/nvim-tree.lua'
+    },
+    {
+        'yegappan/greplace',         -- Use :Gsearch and :Greplace for search and replace in files
+    },
+    { 'nvim-lualine/lualine.nvim' }, -- Status line
+    { 'akinsho/bufferline.nvim' },   -- Tabline
+    -- 'chentoast/marks.nvim' -- Show m's on numbers panel
+    { 'jghauser/mkdir.nvim' },
+    { 'windwp/nvim-autopairs' }, -- Autoclose ',(,{,[
+    { 'roxma/nvim-yarp' },
+    { 'matze/vim-move' },        -- Move a line or selection with Alt + j/k
+    {
+        'Shougo/vimproc.vim',    -- TS compiler with :make
+        run = 'make'
+    },
+    -- 'roxma/python-support.nvim' -- auto pip install with :PythonSupportInitPython3 (not working right now)
+    {
+        'FooSoft/vim-argwrap', -- wrap and unwrap hashes and arrays with ,a
+    },
+    {
+        'AndrewRadev/splitjoin.vim', -- wrap code statements gS and gJ
+        lazy = true,
+        keys = {
+            { "gJ", "gS", desc = "Wrap code" },
+        }
+    },
+    -- {'unblevable/quick-scope', -- magic with f}, -- 'ggandor/lightspeed.nvim'  -- magic with s
+    { 'AndrewRadev/switch.vim' }, -- Switch and toggle a lot of things, see the wiki
+
+    -- Language support
+    {
+        'tpope/vim-rails' -- Vim Rails productivity (I strongly recommend read the wiki)
+    },
+    {
+        'ray-x/guihua.lua',
+        build = 'cd lua/fzy && make'
+    },
+    {
+        -- LSP Configuration & Plugins
+        'neovim/nvim-lspconfig',
+        dependencies = {
+            -- Automatically install LSPs to stdpath for neovim
+            {
+                'williamboman/mason.nvim',
+                build = ":MasonUpdate", -- :MasonUpdate updates registry contents
+                config = function()
+                    require("mason").setup()
+                end
+            },
+            'williamboman/mason-lspconfig.nvim',
+
+            -- Useful status updates for LSP
+            -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+            {
+                'j-hui/fidget.nvim',
+                tag = 'legacy',
+                opts = {}
+            },
+
+            -- Additional lua configuration, makes nvim stuff amazing!
+            'folke/neodev.nvim',
+            {
+                'dnlhc/glance.nvim', -- :Glance [[opts]] checks places where function is used
+                config = function()
+                    require('glance').setup({})
+                end
+            },
+            {
+                "ThePrimeagen/refactoring.nvim",
+                config = function()
+                    require("refactoring").setup()
+                end,
+            } -- :Refactor [[opts]] Extract and refactor code
+        },
+    },
+    {
+        'hrsh7th/nvim-cmp',
+        dependencies = {
+            -- Snippet Engine & its associated nvim-cmp source
+            'L3MON4D3/LuaSnip',
+            'saadparwaiz1/cmp_luasnip',
+            -- Adds LSP completion capabilities
+            'hrsh7th/cmp-nvim-lsp',
+            -- Adds a number of user-friendly snippets
+            'rafamadriz/friendly-snippets',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-path',
+            'hrsh7th/cmp-cmdline',
+            'ray-x/navigator.lua',
+        },
+        config = function()
+            local cmp = require 'cmp'
+            local luasnip = require 'luasnip'
+            require('luasnip.loaders.from_vscode').lazy_load()
+            luasnip.config.setup {}
+
+            cmp.setup({
+                snippet = {
+                    -- REQUIRED - you must specify a snippet engine
+                    expand = function(args)
+                        -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+                        require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+                        -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+                        -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+                    end,
+                },
+                window = {
+                    -- completion = cmp.config.window.bordered(),
+                    -- documentation = cmp.config.window.bordered(),
+                },
+                mapping = cmp.mapping.preset.insert({
+                    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+                    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+                    ['<C-Space>'] = cmp.mapping.confirm({
+                        behavior = cmp.ConfirmBehavior.Replace,
+                        select = true,
+                    }),
+                    ['<C-e>'] = cmp.mapping.abort(),
+                    ['<Tab>'] = cmp.mapping(function(fallback)
+                        if luasnip.expand_or_locally_jumpable() then
+                            luasnip.expand_or_jump()
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
+                    ['<S-Tab>'] = cmp.mapping(function(fallback)
+                        if luasnip.locally_jumpable(-1) then
+                            luasnip.jump(-1)
+                        else
+                            fallback()
+                        end
+                    end, { 'i', 's' }),
+                }),
+                sources = cmp.config.sources({
+                    { name = 'nvim_lsp' },
+                    -- { name = 'vsnip' }, -- For vsnip users.
+                    { name = 'luasnip' }, -- For luasnip users.
+                    -- { name = 'ultisnips' }, -- For ultisnips users.
+                    -- { name = 'snippy' }, -- For snippy users.
+                }, {
+                    { name = 'buffer' },
+                })
+            })
+        end
+    },
+    {
+        'sudormrfbin/cheatsheet.nvim',
+        dependencies = {
+            { 'nvim-telescope/telescope.nvim' },
+            { 'nvim-lua/popup.nvim' },
+            { 'nvim-lua/plenary.nvim' },
+        }
+    },
+    { 'sheerun/vim-polyglot' }, -- text highlight
+    { 'wellle/targets.vim' },   -- Better text object handling
+    -- 'lifepillar/pgsql.vim' -- PSQL
+    -- 'jalvesaq/Nvim-R', {'branch': 'stable'} -- R
+    -- 'fatih/vim-go' -- GO (read the wiki PLS)
+
+    -- Colorschemes
+    {
+        -- 'morhetz/gruvbox'
+        -- 'dortin42/golden-vim'
+        -- 'RRethy/nvim-base16', base16-gruvbox-dark-pale
+        'ellisonleao/gruvbox.nvim',
+        lazy = false,    -- make sure we load this during startup if it is your main colorscheme
+        priority = 1000, -- make sure to load this before all the other start plugins
+        config = function()
+            vim.cmd([[colorscheme gruvbox]])
+        end
     }
 })
-EOF
 
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-" |-----------------------------------------------------------------------------------------------|
-" |-------------------------------------> personalized keys <-------------------------------------|
-" |-----------------------------------------------------------------------------------------------|
-" |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-" Find files
-nnoremap <C-t> :FZF<CR>
-nnoremap <Leader>g :RG<Space>
-nnoremap <C-B> :Buffers<CR>
-" Insert a space in normal mode
-nnoremap <space> i<space><esc>
+-- Plugin dependent settings
+vim.cmd([[
+  autocmd FileType erb let b:surround_45 = "<% \r %>" " Key -
+  autocmd FileType erb let b:surround_61 = "<%= \r %>" " Key =
+  autocmd FileType rb let b:surround_61 = "#{\r}" " Key =
+]])
 
-" Insert an Enter in normal mode
-nnoremap <A-+> i<CR><esc>h
-nnoremap + 0i<CR><esc>h
+vim.cmd([[
+  au FileType markdown set conceallevel=0
+]])
 
-" Find word under cursor
-nnoremap # #n
+vim.g.python_support_python2_require = 0
 
-" Make window navigation less painful.
-nmap <BS> <C-W>h
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-nnoremap <C-q> <C-^>
+require('gitsigns').setup()
+require("nvim-tree").setup({
+    renderer = {
+        icons = {
+            webdev_colors = false,
+            show = {
+                file = false,
+                folder = false,
+                folder_arrow = false,
+                git = true,
+                modified = false,
+            },
+            glyphs = {
+                git = {
+                    unstaged = "X",
+                    staged = "S",
+                    unmerged = "UM",
+                    renamed = "M",
+                    untracked = "U",
+                    deleted = "D",
+                    ignored = "I",
+                }
+            }
+        }
+    }
+})
+require('nvim-treesitter.configs').setup {
+    highlight = { enable = true },
+    indent = { enable = false },
+    autotag = { enable = true }
+}
+local npairs = require("nvim-autopairs")
 
-" Mapping for multiple-cursors
-let g:VM_maps = {}
-let g:VM_maps['Find Under']         = '<C-d>' " replace C-n
-let g:VM_maps['Find Subword Under'] = '<C-d>' " replace visual C-n
+npairs.setup({
+    check_ts = true,
+    ts_config = {
+        lua = { 'string' }, -- it will not add a pair on that treesitter node
+        javascript = { 'template_string' },
+        java = false,       -- don't check treesitter on java
+    }
+})
 
-" Working with buffers is cool.
-nnoremap <C-n> :bnext<CR>
-nnoremap <C-p> :bprev<CR>
-nnoremap <C-f> :bfirst<CR>
-nnoremap <C-g> :blast<CR>
+local ts_conds = require('nvim-autopairs.ts-conds')
+npairs.add_rules(require('nvim-autopairs.rules.endwise-elixir'))
+npairs.add_rules(require('nvim-autopairs.rules.endwise-lua'))
+npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
+vim.cmd("autocmd FileType guihua lua require('cmp').setup.buffer { enabled = false }")
+vim.cmd("autocmd FileType guihua_rust lua require('cmp').setup.buffer { enabled = false }")
 
-" Working with tabs is cool.
-nnoremap <Leader>l :tablast<CR>
-nnoremap <Leader>f :tabfirst<CR>
-nnoremap <Leader>n :tabNext<CR>
-nnoremap <Leader>p :tabprevious<CR>
+require('bufferline').setup {
+    options = {
+        numbers = function(opts)
+            return string.format('%s', opts.id)
+        end,
+        diagnostics = false,
+        indicator_icon = '',
+        separator_style = 'thin',
+        always_show_bufferline = false,
+        show_buffer_icons = false,
+        show_buffer_close_icons = false,
+        show_close_icon = false
+    }
+}
+-- require('marks').setup({
+-- default_mappings = true
+-- })
+require 'navigator'.setup()
+require('lualine').setup({
+    options = {
+        icons_enabled = false,
+        theme = 'gruvbox-material',
+        component_separators = { left = '', right = '' },
+        section_separators = { left = '', right = '' },
+        disabled_filetypes = {},
+        always_divide_middle = true,
+    },
+    sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { { 'filename', path = 1 } },
+        lualine_c = {},
+        lualine_x = { 'branch', 'diff' },
+        lualine_y = { 'encoding' },
+        lualine_z = { 'location' }
+    },
+    inactive_sections = {
+        lualine_a = {},
+        lualine_b = { 'filename' },
+        lualine_c = {},
+        lualine_x = { 'location' },
+        lualine_y = {},
+        lualine_z = {}
+    },
+    extensions = { 'fugitive' },
+})
 
-" Copy/paste from system clipboard
-nnoremap  Y "+y
-vnoremap  Y "+y
+-- [[ Configure LSP ]]
+--  This function gets run when an LSP connects to a particular buffer.
+local on_attach = function(_, bufnr)
+    -- NOTE: Remember that lua is a real programming language, and as such it is possible
+    -- to define small helper and utility functions so you don't have to repeat yourself
+    -- many times.
+    --
+    -- In this case, we create a function that lets us more easily define mappings specific
+    -- for LSP related items. It sets the mode, buffer and description for us each time.
+    local nmap = function(keys, func, desc)
+        if desc then
+            desc = 'LSP: ' .. desc
+        end
 
-" Force update file
-nnoremap <F5> :e!<CR>
+        vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
+    end
 
-" Relative numbering is pretty useful for motions (3j, 5k...). however i'd
-" prefer to have a way for switching relative numbers with a single map.
-nmap <F6> :set invrelativenumber<CR>
-imap <F6><esc> :set invrelativenumber<CR>a
+    nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+    nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-" Undo tree
-nnoremap <F7> :UndotreeToggle<CR>
+    nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+    nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+    nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+    nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+    nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-" NERDtree
-map <f2> :NERDTreeToggle<CR>
-nmap <Leader>r :NERDTreeFind<CR>
+    -- See `:help K` for why this keymap
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
-" Close the current buffer
-command! BW :bn|:bd#
-nnoremap <Leader>q :BW<CR>
+    -- Lesser used LSP functionality
+    nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+    nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+    nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+    nmap('<leader>wl', function()
+        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, '[W]orkspace [L]ist Folders')
 
-" Delete current buffer
-nnoremap <Leader>d :Unlink<CR>:BW<CR>
+    -- Create a command `:Format` local to the LSP buffer
+    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+        vim.lsp.buf.format()
+    end, { desc = 'Format current buffer with LSP' })
+end
 
-" Save and restore sessions
-" Quick write session with F3
-nnoremap <F3> :mksession! ~/.vim/session <cr>
-" And load session with F4
-nnoremap <F4> :source ~/.vim/session <cr>
+-- Enable the following language servers
+--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+--
+--  Add any additional override configuration in the following tables. They will be passed to
+--  the `settings` field of the server config. You must look up that documentation yourself.
+--
+--  If you want to override the default filetypes that your language server will attach to you can
+--  define the property 'filetypes' to the map in question.
+local servers = {
+    -- clangd = {},
+    -- gopls = {},
+    -- pyright = {},
+    -- rust_analyzer = {},
+    -- tsserver = {},
+    -- html = { filetypes = { 'html', 'twig', 'hbs'} },
 
-" Save with Ctrl + s
-nnoremap <C-s> :update<CR>
-inoremap <C-s> <Esc>:update<CR>a
+    lua_ls = {
+        Lua = {
+            workspace = { checkThirdParty = false },
+            telemetry = { enable = false },
+        },
+    },
+}
 
-" Wrap arrays and hashes
-nnoremap <silent> <Leader>a :ArgWrap<CR>
+-- Setup neovim lua configuration
+require('neodev').setup()
 
-" Switch
-let g:switch_mapping = "-"
+-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-" Grepper
-let g:grepper = {}
-let g:grepper.tools = ['rg']
-nnoremap <Leader>t :GrepperRg<Space>
-nnoremap <Leader>T :Grepper -tool rg -buffers<CR>
-nmap gs  <plug>(GrepperOperator)
-xmap gs  <plug>(GrepperOperator)
+-- Ensure the servers above are installed
+local mason_lspconfig = require 'mason-lspconfig'
 
-" Copy file path
-nmap <Leader>y :let @+ = expand("%")<CR>
-nnoremap <C-c> <ESC>
+mason_lspconfig.setup {
+    ensure_installed = vim.tbl_keys(servers),
+}
 
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+mason_lspconfig.setup_handlers {
+    function(server_name)
+        require('lspconfig')[server_name].setup {
+            capabilities = capabilities,
+            on_attach = on_attach,
+            settings = servers[server_name],
+            filetypes = (servers[server_name] or {}).filetypes,
+        }
+    end
+}
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+-- Key remaps
+-- Find files
+vim.api.nvim_set_keymap('n', '<C-t>', ':Telescope find_files<CR>', { noremap = true })
+
+-- Insert a space in normal mode
+vim.api.nvim_set_keymap('n', '<space>', 'i<space><esc>', { noremap = true })
+
+-- Insert an Enter in normal mode
+vim.api.nvim_set_keymap('n', '<A-+>', 'i<CR><esc>h', { noremap = true })
+vim.api.nvim_set_keymap('n', '+', '0i<CR><esc>h', { noremap = true })
+
+-- Find word under cursor
+vim.api.nvim_set_keymap('n', '#', 'gd', { noremap = true })
+
+-- Make window navigation less painful.
+vim.api.nvim_set_keymap('n', '<BS>', '<C-W>h', {})
+vim.api.nvim_set_keymap('', '<C-h>', '<C-w>h', {})
+vim.api.nvim_set_keymap('', '<C-j>', '<C-w>j', {})
+vim.api.nvim_set_keymap('', '<C-k>', '<C-w>k', {})
+vim.api.nvim_set_keymap('', '<C-l>', '<C-w>l', {})
+vim.api.nvim_set_keymap('n', '<C-q>', '<C-^>', { noremap = true })
+
+-- Working with buffers is cool.
+vim.api.nvim_set_keymap('n', '<C-n>', ':BufferLineCycleNext<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-p>', ':BufferLineCyclePrev<CR>', { noremap = true })
+
+-- These commands will move the current buffer backwards or forwards in the bufferline
+vim.api.nvim_set_keymap('n', '<A-n>', ':BufferLineMoveNext<CR>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('n', '<A-p>', ':BufferLineMovePrev<CR>', { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<C-f>', ':bfirst<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<C-g>', ':blast<CR>', { noremap = true })
+
+-- Working with tabs is cool.
+vim.api.nvim_set_keymap('n', '<Leader>l', ':tablast<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>f', ':tabfirst<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>n', ':tabNext<CR>', { noremap = true })
+vim.api.nvim_set_keymap('n', '<Leader>p', ':tabprevious<CR>', { noremap = true })
+
+-- Copy/paste from system clipboard
+vim.api.nvim_set_keymap('n', 'Y', '"+y', { noremap = true })
+vim.api.nvim_set_keymap('v', 'Y', '"+y', { noremap = true })
+
+-- Copy WSL
+vim.cmd([[
+  let s:clip = '/mnt/c/Windows/System32/clip.exe'
+  if executable(s:clip)
+    augroup WSLYank
+      autocmd!
+      autocmd TextYankPost * if v:event.regname=='+' | call system('echo '.shellescape(join(v:event.regcontents)).' | '.s:clip) | endif
+    augroup END
+  endif
+]])
+
+-- Force update file
+vim.api.nvim_set_keymap('n', '<F5>', ':e!<CR>', {})
+
+-- Relative numbering
+vim.api.nvim_set_keymap('n', '<F6>', ':set invrelativenumber<CR>', {})
+vim.api.nvim_set_keymap('i', '<F6><esc>', ':set invrelativenumber<CR>a', {})
+
+-- NvimTree
+vim.api.nvim_set_keymap('n', '<f2>', ':NvimTreeToggle<CR>', {})
+vim.api.nvim_set_keymap('n', '<Leader>r', ':NvimTreeFindFile<CR>', {})
+
+-- Close the current buffer
+vim.api.nvim_command('command! BW :bn|:bd#')
+vim.api.nvim_set_keymap('n', '<Leader>q', ':BW<CR>', {})
+
+-- Delete current buffer
+vim.api.nvim_set_keymap('n', '<Leader>d', ':Unlink<CR>:BW<CR>', {})
+
+-- Save and restore sessions
+vim.api.nvim_set_keymap('n', '<F3>', ':mksession! ~/.vim/session <cr>', {})
+vim.api.nvim_set_keymap('n', '<F4>', ':source ~/.vim/session <cr>', {})
+
+-- Save with Ctrl + s
+vim.api.nvim_set_keymap('n', '<C-s>', ':update<CR>', {})
+vim.api.nvim_set_keymap('i', '<C-s>', '<Esc>:update<CR>a', {})
+
+-- Wrap arrays and hashes
+vim.api.nvim_set_keymap('n', '<Leader>a', ':ArgWrap<CR>', {})
+
+-- Switch
+vim.api.nvim_set_keymap('n', '-', ':Switch<CR>', {})
+
+-- Copy file path
+vim.api.nvim_set_keymap('n', '<Leader>y', ':let @+ = expand("%")<CR>', {})
+
+-- Telescope
+vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<cr>")
