@@ -92,7 +92,6 @@ plugins=(
 )
 
 source $ZSH/oh-my-zsh.sh
-alias nvim=~/Downloads/nvim.appimage
 
 # User configuration
 
