@@ -129,12 +129,13 @@ require("lazy").setup({
     --         vim.keymap.set({ "n", "o", "x" }, "ge", "<cmd>lua require('spider').motion('ge')<CR>", { desc = "Spider-ge" })
     --     end
     -- },
-    {
-        'abecodes/tabout.nvim',
-        config = function()
-            require('tabout').setup()
-        end
-    },
+    -- tabout.nvim deshabilitado (requiere API antigua de treesitter)
+    -- {
+    --     'abecodes/tabout.nvim',
+    --     config = function()
+    --         require('tabout').setup()
+    --     end
+    -- },
     {
         'NvChad/nvim-colorizer.lua',
         config = function()
@@ -185,12 +186,13 @@ require("lazy").setup({
     {
         "nvim-treesitter/nvim-treesitter",
         build = ':TSUpdate',
-        main = "nvim-treesitter.configs",
-        opts = {
-            highlight = { enable = true },
-            indent = { enable = true },
-            auto_install = true,
-        },
+        config = function()
+            -- Configuración moderna de treesitter (nvim 0.10+)
+            -- El highlighting ahora está integrado en Neovim
+            vim.opt.foldmethod = "expr"
+            vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+            vim.opt.foldenable = false  -- No plegar por defecto
+        end,
     },
     { 'lewis6991/gitsigns.nvim' }, -- git hunks on numbers panel
     { 'mattn/emmet-vim' },         -- Emmet Ctrl + b + , in normal or insert mode
@@ -360,18 +362,15 @@ vim.treesitter.language.register('markdown', 'mdx')
 local npairs = require("nvim-autopairs")
 
 npairs.setup({
-    check_ts = true,
-    ts_config = {
-        lua = { 'string' }, -- it will not add a pair on that treesitter node
-        javascript = { 'template_string' },
-        java = false,       -- don't check treesitter on java
-    }
+    check_ts = false,  -- Deshabilitado (API antigua de treesitter)
 })
 
-local ts_conds = require('nvim-autopairs.ts-conds')
-npairs.add_rules(require('nvim-autopairs.rules.endwise-elixir'))
-npairs.add_rules(require('nvim-autopairs.rules.endwise-lua'))
-npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
+-- Reglas endwise simplificadas
+pcall(function()
+    npairs.add_rules(require('nvim-autopairs.rules.endwise-elixir'))
+    npairs.add_rules(require('nvim-autopairs.rules.endwise-lua'))
+    npairs.add_rules(require('nvim-autopairs.rules.endwise-ruby'))
+end)
 vim.cmd("autocmd FileType guihua lua require('cmp').setup.buffer { enabled = false }")
 vim.cmd("autocmd FileType guihua_rust lua require('cmp').setup.buffer { enabled = false }")
 
