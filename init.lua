@@ -183,19 +183,14 @@ require("lazy").setup({
         end,
     },
     {
-        "nvim-treesitter/nvim-treesitter", -- The main reason Im using neovim
-        dependencies = {
-            'nvim-treesitter/nvim-treesitter-textobjects',
-        },
+        "nvim-treesitter/nvim-treesitter",
         build = ':TSUpdate',
-        config = function()
-            -- Configuración moderna de treesitter (nvim 0.10+)
-            require('nvim-treesitter.configs').setup({
-                highlight = { enable = true },
-                indent = { enable = true },
-                auto_install = true,
-            })
-        end,
+        main = "nvim-treesitter.configs",
+        opts = {
+            highlight = { enable = true },
+            indent = { enable = true },
+            auto_install = true,
+        },
     },
     { 'lewis6991/gitsigns.nvim' }, -- git hunks on numbers panel
     { 'mattn/emmet-vim' },         -- Emmet Ctrl + b + , in normal or insert mode
@@ -507,17 +502,16 @@ local mason_lspconfig = require 'mason-lspconfig'
 
 mason_lspconfig.setup {
     ensure_installed = vim.tbl_keys(servers),
-}
-
-mason_lspconfig.setup_handlers {
-    function(server_name)
-        require('lspconfig')[server_name].setup {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = servers[server_name],
-            filetypes = (servers[server_name] or {}).filetypes,
-        }
-    end
+    handlers = {
+        function(server_name)
+            require('lspconfig')[server_name].setup {
+                capabilities = capabilities,
+                on_attach = on_attach,
+                settings = servers[server_name],
+                filetypes = (servers[server_name] or {}).filetypes,
+            }
+        end
+    }
 }
 
 -- Key remaps
