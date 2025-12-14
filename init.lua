@@ -231,10 +231,10 @@ require("lazy").setup({
     {
         'tpope/vim-rails' -- Vim Rails productivity (I strongly recommend read the wiki)
     },
-    {
-        'ray-x/guihua.lua',
-        build = 'cd lua/fzy && make'
-    },
+    --{
+    --    'ray-x/guihua.lua',
+    --    build = 'cd lua/fzy && make'
+    --},
     {
         -- LSP Configuration & Plugins
         'neovim/nvim-lspconfig',
