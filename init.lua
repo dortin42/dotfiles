@@ -162,7 +162,7 @@ require("lazy").setup({
                         use_delta = true,
                         use_custom_command = nil, -- setting this implies `use_delta = false`. Accepted format is: { "bash", "-c", "echo '$DIFF' | delta" }
                         side_by_side = false,
-                        diff_context_lines = vim.o.scrolloff,
+                        vim_diff_opts = { ctxlen = vim.o.scrolloff },  -- Reemplaza diff_context_lines (deprecated)
                         entry_format = "state #$ID, $STAT, $TIME",
                         time_format = "",
                         mappings = {
@@ -188,6 +188,14 @@ require("lazy").setup({
             'nvim-treesitter/nvim-treesitter-textobjects',
         },
         build = ':TSUpdate',
+        config = function()
+            -- Configuración moderna de treesitter (nvim 0.10+)
+            require('nvim-treesitter.configs').setup({
+                highlight = { enable = true },
+                indent = { enable = true },
+                auto_install = true,
+            })
+        end,
     },
     { 'lewis6991/gitsigns.nvim' }, -- git hunks on numbers panel
     { 'mattn/emmet-vim' },         -- Emmet Ctrl + b + , in normal or insert mode
@@ -350,11 +358,10 @@ require("nvim-tree").setup({
         }
     }
 })
-require('nvim-treesitter.configs').setup {
-    -- highlight = { enable = true },
-    -- indent = { enable = false },
-    -- autotag = { enable = true }
-}
+-- Treesitter (configuración moderna - nvim 0.10+)
+-- La configuración ahora se hace en el plugin spec de lazy.nvim
+-- o directamente con vim.treesitter
+vim.treesitter.language.register('markdown', 'mdx')
 local npairs = require("nvim-autopairs")
 
 npairs.setup({
