@@ -64,34 +64,20 @@ if not ok then
     print("Failed to set undo settings: ", err)
 end
 
--- Terminal settings
--- Are we supporting colors?
-if tonumber(vim.o.t_Co) > 2 then
-    vim.cmd('syntax on')
-    vim.wo.colorcolumn = "80"
-    vim.cmd('silent! color gruvbox')
-    vim.o.background = "dark"
-end
+-- Terminal settings (Neovim 0.10+ siempre soporta true colors)
+vim.o.termguicolors = true
+vim.wo.colorcolumn = "80"
+vim.wo.cursorline = true
+vim.wo.cursorcolumn = true
+vim.o.background = "dark"
 
--- Extra fancyness if full pallete is supported.
-if tonumber(vim.o.t_Co) >= 256 then
-    vim.o.termguicolors = true
-    vim.wo.cursorline = true
-    vim.wo.cursorcolumn = true
-end
-
--- Mark trailing spaces depending on whether we have a fancy terminal or not
-if tonumber(vim.o.t_Co) > 2 then
-    vim.cmd('highlight ExtraWhitespace ctermbg=red guibg=red')
-    vim.cmd('match ExtraWhitespace /\\s\\+$/')
-else
-    vim.o.listchars = "trail:$"
-    vim.wo.list = true
-end
+-- Mark trailing spaces
+vim.cmd('highlight ExtraWhitespace ctermbg=red guibg=red')
+vim.cmd('match ExtraWhitespace /\\s\\+$/')
 
 -- Package manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -617,4 +603,5 @@ vim.api.nvim_set_keymap('n', '-', ':Switch<CR>', {})
 vim.api.nvim_set_keymap('n', '<Leader>y', ':let @+ = expand("%")<CR>', {})
 
 -- Telescope
+
 vim.keymap.set("n", "<leader>u", "<cmd>Telescope undo<cr>")
