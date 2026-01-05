@@ -142,7 +142,7 @@ compinit
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # pnpm
-export PNPM_HOME="/home/dani/.local/share/pnpm"
+export PNPM_HOME="~/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -150,9 +150,5 @@ esac
 # pnpm end
 
 # cargo
-export CARGO="/home/dani/.cargo/bin"
-case ":$PATH:" in
-  *":$CARGO:"*) ;;
-  *) export PATH="$CARGO:$PATH" ;;
-esac
+export PATH=~/.cargo/bin:$PATH
 # cargo end
