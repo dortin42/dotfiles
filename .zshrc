@@ -148,3 +148,11 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+# cargo
+export CARGO="/home/dani/.cargo/bin"
+case ":$PATH:" in
+  *":$CARGO:"*) ;;
+  *) export PATH="$CARGO:$PATH" ;;
+esac
+# cargo end
